@@ -17,6 +17,7 @@ This is a complete avatar package that you can use for your profile and avatar
 ![Capture3](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/8990ce91-bebe-461b-9aff-291a3a1a0a90)
 
 ![CaptureWeb](https://github.com/SwanFlutter/avatar_better/assets/151648897/25948b33-eaeb-4aa8-bc25-d8361a604dca)
+![CaptureAvatar](https://github.com/SwanFlutter/avatar_better/assets/151648897/abff37b2-fc3b-448d-9563-cc11126c4cd5)
 
 
 
