@@ -49,7 +49,24 @@ import 'package:avatar_better/avatar_better.dart';
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 ```
+
+
+- Add this line code to application AndroidManifest.xml
+
+```
+android:requestLegacyExternalStorage="true"
+```
+
+```
+<application
+        android:label="avaterbetter"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
+```
+
 - Add UCropActivity into your AndroidManifest.xml
+
 ````xml
 <activity
     android:name="com.yalantis.ucrop.UCropActivity"
@@ -58,8 +75,13 @@ import 'package:avatar_better/avatar_better.dart';
 ````
 
 ### iOS
-- No configuration required
 
+```xml
+     <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to select images for editing.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to take photos for editing.</string>
+```
 
 #### macOS installation
 
@@ -90,13 +112,20 @@ add a filesystem access
 ## example
 
 ```dart
- Avatar.circle(
+ Avatar(
+/// With this function, you can display page shift or page view in a personalized way.
 onTapAvatar: () {},
 radius: 35,
 text: avatar[index],
 randomGradient: true,
 randomColor: false,
-),,
+imageNetwork:
+ "https://images.unsplash.com/photo-1616731948638-b0d0befef759?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+
+ /// By activating this option, the user can see the avatar images in the page view
+  showPageViewOnTap: true,
+                
+),
 ```
 
 ```dart

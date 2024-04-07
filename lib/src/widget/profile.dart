@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:avatar_better/src/widget/isBorder_avatar.dart';
+import 'package:avatar_better/src/widget/isborder_avatar.dart';
 import 'package:avatar_better/src/widget/none_border_avatar.dart';
 import 'package:avatar_better/web/isweb.dart';
 import 'package:flutter/foundation.dart';
@@ -84,7 +84,7 @@ class Profile extends StatefulWidget {
 
   final OnPickerChangeWeb? onPickerChangeWeb;
   Profile({
-    Key? key,
+    super.key,
     required this.radius,
     required this.text,
     this.onPickerChange,
@@ -106,7 +106,7 @@ class Profile extends StatefulWidget {
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
     bool randomGradient = false,
-  }) : super(key: key) {
+  }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:avatar_better/src/widget/page_view.dart';
 import 'package:flutter/material.dart';
 
 import '../tools/gradiant_random_tools.dart';
@@ -27,6 +28,7 @@ class Circle extends StatelessWidget {
   final double? radius;
   final String? image;
   final String? imageNetwork;
+  final List<String>? listImageNetwork;
   Color? backgroundColor;
   Gradient? gradientBackgroundColor;
   Gradient? gradientWidthBorder;
@@ -40,6 +42,22 @@ class Circle extends StatelessWidget {
   /// If this parameter is false, no border will be created for the avatar.
   final bool isBorderAvatar;
 
+  final bool showPageViewOnTap;
+
+  final TextStyle? stylePageViewTextName;
+
+  final Color? backgroundColorPageViewAppBar;
+
+  final void Function()? onTapPageViewDelete;
+
+  final Widget? widgetLoadingPageView;
+
+  final Color? backgroundColorDropdownMenuItem;
+
+  final Color? iconColorDropdownMenuItem;
+
+  final Color? backBottomColor;
+
   Circle({
     Key? key,
     required this.text,
@@ -47,14 +65,24 @@ class Circle extends StatelessWidget {
     this.radius = 35,
     this.image,
     this.imageNetwork,
+    this.listImageNetwork,
     this.backgroundColor,
     this.gradientBackgroundColor,
+    this.stylePageViewTextName = const TextStyle(
+        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0),
+    this.backgroundColorPageViewAppBar = Colors.white,
+    this.onTapPageViewDelete,
+    this.widgetLoadingPageView,
+    this.backgroundColorDropdownMenuItem = Colors.white,
+    this.iconColorDropdownMenuItem = Colors.black,
+    this.backBottomColor = Colors.black,
     this.shadowColor = Colors.black,
     this.gradientWidthBorder =
         const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
     this.elevation = 0,
     this.widthBorder = 5.0,
     this.isBorderAvatar = false,
+    this.showPageViewOnTap = false,
     this.style = const TextStyle(
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
@@ -74,7 +102,30 @@ class Circle extends StatelessWidget {
   Widget build(BuildContext context) {
     File? imagePicker;
     return InkResponse(
-      onTap: onTapAvatar,
+      onTap: showPageViewOnTap
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PageViewAvatar(
+                    imageNetwork: imageNetwork,
+                    image: image,
+                    imagePicker: imagePicker,
+                    listImageNetwork: listImageNetwork,
+                    namePageview: text!.toLowerCase(),
+                    backBottomColor: backBottomColor,
+                    backgroundColorDropdownMenuItem:
+                        backgroundColorDropdownMenuItem,
+                    iconColorDropdownMenuItem: iconColorDropdownMenuItem,
+                    backgroundColorPageViewAppBar:
+                        backgroundColorPageViewAppBar,
+                    onTapPageViewDelete: onTapPageViewDelete,
+                    widgetLoadingPageView: widgetLoadingPageView,
+                  ),
+                ),
+              );
+            }
+          : onTapAvatar,
       child: isBorderAvatar
           ? CustomPaint(
               painter: GradientCirclePainter(
@@ -101,9 +152,12 @@ class Circle extends StatelessWidget {
                             image: FileImage(imagePicker),
                             fit: BoxFit.cover,
                           )
-                        : imageNetwork != null
+                        : imageNetwork != null || listImageNetwork != null
                             ? DecorationImage(
-                                image: Image.network(imageNetwork!).image,
+                                image: Image.network(imageNetwork != null
+                                        ? imageNetwork!
+                                        : listImageNetwork!.last)
+                                    .image,
                                 fit: BoxFit.cover,
                               )
                             : image != null
@@ -117,6 +171,7 @@ class Circle extends StatelessWidget {
                   child: (imagePicker == null &&
                           imageNetwork == null &&
                           image == null &&
+                          listImageNetwork == null &&
                           text != null)
                       ? Text(
                           AvatarCircleExtensions.initials(text!),
@@ -146,9 +201,12 @@ class Circle extends StatelessWidget {
                           image: FileImage(imagePicker),
                           fit: BoxFit.cover,
                         )
-                      : imageNetwork != null
+                      : imageNetwork != null || listImageNetwork != null
                           ? DecorationImage(
-                              image: Image.network(imageNetwork!).image,
+                              image: Image.network(imageNetwork != null
+                                      ? imageNetwork!
+                                      : listImageNetwork!.last)
+                                  .image,
                               fit: BoxFit.cover,
                             )
                           : image != null
@@ -162,6 +220,7 @@ class Circle extends StatelessWidget {
                 child: (imagePicker == null &&
                         imageNetwork == null &&
                         image == null &&
+                        listImageNetwork == null &&
                         text != null)
                     ? Text(
                         AvatarCircleExtensions.initials(text!),
