@@ -4,14 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class IsWeb extends StatelessWidget {
+  /// Represents a profile widget.
   final Profile widget;
+
+  /// Represents the image bytes for web.
   final Uint8List? imageBytesWeb;
 
   const IsWeb({
-    Key? key,
+    super.key,
     required this.widget,
     required this.imageBytesWeb,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     DecorationImage? decorationImage;

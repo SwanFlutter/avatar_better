@@ -82,6 +82,7 @@ class Profile extends StatefulWidget {
   /// [shadowColor]: create shadow widget  (can be null).
   final Color? shadowColor;
 
+  /// [onPickerChangeWeb] :is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
   final OnPickerChangeWeb? onPickerChangeWeb;
   Profile({
     super.key,
@@ -187,7 +188,10 @@ class _ProfileState extends State<Profile> {
                         await imageModel.crop(file.first, CropStyle.circle);
                     // ignore: use_build_context_synchronously
                     final croppedImageBytes = await imageModel.cropForWeb(
-                        file.first, CropStyle.circle, context);
+                        // ignore: use_build_context_synchronously
+                        file.first,
+                        CropStyle.circle,
+                        context);
 
                     if (kIsWeb && croppedImageBytes != null) {
                       setState(() {
@@ -246,7 +250,11 @@ class _ProfileState extends State<Profile> {
                         await imageModel.crop(file.first, CropStyle.circle);
                     // ignore: use_build_context_synchronously
                     final croppedImageBytes = await imageModel.cropForWeb(
-                        file.first, CropStyle.circle, context);
+                        // ignore: use_build_context_synchronously
+                        file.first,
+                        CropStyle.circle,
+                        // ignore: use_build_context_synchronously
+                        context);
 
                     if (kIsWeb && croppedImageBytes != null) {
                       setState(() {

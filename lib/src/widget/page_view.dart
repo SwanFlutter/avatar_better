@@ -6,18 +6,45 @@ import 'package:flutter/material.dart';
 import 'package:image_downloader_web/image_downloader_web.dart';
 
 class PageViewAvatar extends StatefulWidget {
+  ///
+  ///
+  /// Represents a list of network images that can be displayed.
+  ///
   final List<String>? listImageNetwork;
+
+  /// Represents a local image file path.
   final String? image;
+
+  /// Represents a network image URL.
   final String? imageNetwork;
+
+  /// Represents an image selected from the device's storage.
   final File? imagePicker;
+
+  /// Represents the name of the page view.
   final String? namePageview;
+
+  /// Represents the text style for the page view's name.
   final TextStyle? stylePageViewTextName;
+
+  /// Represents the background color of the app bar in the page view.
   final Color? backgroundColorPageViewAppBar;
+
+  /// Represents the callback function triggered when the delete button in the page view is tapped.
   final void Function()? onTapPageViewDelete;
+
+  /// Represents the widget to be displayed while loading the page view.
   final Widget? widgetLoadingPageView;
+
+  /// Represents the background color of dropdown menu items.
   final Color? backgroundColorDropdownMenuItem;
+
+  /// Represents the icon color of dropdown menu items.
   final Color? iconColorDropdownMenuItem;
+
+  /// Represents the background color of the bottom section.
   final Color? backBottomColor;
+
   const PageViewAvatar({
     super.key,
     required this.imagePicker,

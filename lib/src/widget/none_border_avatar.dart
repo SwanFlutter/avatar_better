@@ -11,7 +11,10 @@ class NoneBorderAvatar extends StatelessWidget {
     required this.image,
   });
 
+  /// [widget]: The widget for the profile.
   final Profile widget;
+
+  /// [image]: The image for the profile.
   final File? image;
 
   @override
