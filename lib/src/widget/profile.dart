@@ -33,13 +33,11 @@ extension ProfileExtensions on Profile {
 ///Example:
 ///
 ///```dart
-///Avatar(
+///Profile(
 ///text: avatar[index],
 ///radius: 35,
 ///randomGradient: true,
 ///randomColor: false,
-///imageNetwork: "https://images.unsplash.com/photo-1616731948638-b0d0befef759?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-/// showPageViewOnTap: true, //By activating this option, the user can see the avatar images in the page view.
 /// )
 /// ```
 
