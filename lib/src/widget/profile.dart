@@ -30,6 +30,19 @@ extension ProfileExtensions on Profile {
   }
 }
 
+///Example:
+///
+///```dart
+///Avatar(
+///text: avatar[index],
+///radius: 35,
+///randomGradient: true,
+///randomColor: false,
+///imageNetwork: "https://images.unsplash.com/photo-1616731948638-b0d0befef759?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+/// showPageViewOnTap: true, //By activating this option, the user can see the avatar images in the page view.
+/// )
+/// ```
+
 class Profile extends StatefulWidget {
   /// [text]: The text to display on the profile.
   final String? text;
@@ -84,6 +97,28 @@ class Profile extends StatefulWidget {
 
   /// [onPickerChangeWeb] :is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
   final OnPickerChangeWeb? onPickerChangeWeb;
+
+  /// [cropStyle] : crop image style
+  /// Default = cropStyle.circle
+  final CropStyle? cropStyle;
+
+  /// [toolbarColor] : color toolbar picker for corp image
+  /// Default = Colors.deepOrange.
+  final Color toolbarColorCrop;
+
+  /// [toolbarWidgetColor] : color toolbar widget picker for corp image
+  /// Default = Colors.white.
+  final Color toolbarWidgetColorCrop;
+
+  /// [initAspectRatioCrop] desired aspect ratio is applied (from the list of given aspect ratio presets)
+  /// when starting the cropper
+  /// Default = CropAspectRatioPreset.original
+  final CropAspectRatioPresetData initAspectRatioCrop;
+
+  /// [webPresentStyle] Presentation style of cropper, either a dialog or a page (route)
+  /// Default = WebPresentStyle.dialog
+  final WebPresentStyle webPresentStyle;
+
   Profile({
     super.key,
     required this.radius,
@@ -97,6 +132,11 @@ class Profile extends StatefulWidget {
     this.shadowColor = Colors.black,
     this.isBorderAvatar = false,
     this.backgroundColor = Colors.green,
+    this.cropStyle = CropStyle.circle,
+    this.toolbarColorCrop = Colors.deepOrange,
+    this.toolbarWidgetColorCrop = Colors.white,
+    this.initAspectRatioCrop = CropAspectRatioPreset.original,
+    this.webPresentStyle = WebPresentStyle.dialog,
     this.gradientWidthBorder =
         const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
     this.iconColor = Colors.black,
@@ -184,14 +224,18 @@ class _ProfileState extends State<Profile> {
                       await imageModel.pickImage(ImageSource.gallery, false);
 
                   if (file.isNotEmpty) {
-                    final croppedFile =
-                        await imageModel.crop(file.first, CropStyle.circle);
+                    final croppedFile = await imageModel.crop(file.first,
+                        cropStyle: widget.cropStyle,
+                        toolbarColor: widget.toolbarColorCrop,
+                        toolbarWidgetColor: widget.toolbarWidgetColorCrop,
+                        initAspectRatio: widget.initAspectRatioCrop);
                     // ignore: use_build_context_synchronously
                     final croppedImageBytes = await imageModel.cropForWeb(
-                        // ignore: use_build_context_synchronously
-                        file.first,
-                        CropStyle.circle,
-                        context);
+                      file.first,
+                      presentStyle: widget.webPresentStyle,
+                      // ignore: use_build_context_synchronously
+                      buildContext: context,
+                    );
 
                     if (kIsWeb && croppedImageBytes != null) {
                       setState(() {
@@ -246,15 +290,18 @@ class _ProfileState extends State<Profile> {
                       await imageModel.pickImage(ImageSource.camera, false);
 
                   if (file.isNotEmpty) {
-                    final croppedFile =
-                        await imageModel.crop(file.first, CropStyle.circle);
+                    final croppedFile = await imageModel.crop(file.first,
+                        cropStyle: widget.cropStyle,
+                        toolbarColor: widget.toolbarColorCrop,
+                        toolbarWidgetColor: widget.toolbarWidgetColorCrop,
+                        initAspectRatio: widget.initAspectRatioCrop);
                     // ignore: use_build_context_synchronously
                     final croppedImageBytes = await imageModel.cropForWeb(
-                        // ignore: use_build_context_synchronously
-                        file.first,
-                        CropStyle.circle,
-                        // ignore: use_build_context_synchronously
-                        context);
+                      file.first,
+                      presentStyle: widget.webPresentStyle,
+                      // ignore: use_build_context_synchronously
+                      buildContext: context,
+                    );
 
                     if (kIsWeb && croppedImageBytes != null) {
                       setState(() {

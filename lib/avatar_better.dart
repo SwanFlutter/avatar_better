@@ -8,6 +8,7 @@ import 'package:avatar_better/src/tools/text_to_color.dart';
 import 'package:avatar_better/src/widget/page_view.dart';
 import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 typedef OnPickerChange = void Function(File file);
 
@@ -23,6 +24,37 @@ extension AvatarCircleExtensions on Avatar {
     return result.trim().toUpperCase();
   }
 }
+
+/// A widget that displays an avatar image.
+///
+///Example:
+///
+///```dart
+///Avatar(
+///onTapAvatar: () {},//With this function, you can display page shift or page view in a personalized way.
+///text: avatar[index],
+///radius: 35,
+///randomGradient: true,
+///randomColor: false,
+///imageNetwork: "https://images.unsplash.com/photo-1616731948638-b0d0befef759?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+/// showPageViewOnTap: true, //By activating this option, the user can see the avatar images in the page view.
+/// )
+/// ```
+/// [text]: The text to display on the avatar.
+///
+/// [widthBorder]: The border width of the avatar (default: 0.0).
+///
+/// [radius]: The radius of the avatar size.
+///
+/// [image]: The imageAssets for the avatar.
+///
+/// [imageNetwork]: The image URL for the avatar.
+///
+/// [backgroundColor]: The background color of the avatar (can be null).
+///
+/// [gradientBackgroundColor]: The gradient background of the avatar (can be null).
+///
+/// [gradientWidthBorder]: The gradient for the avatar's border (default: linear gradient from blue to deep purple).
 
 class Avatar extends StatefulWidget {
   /// [onTapAvatar]: A callback function for when the avatar is tapped.
@@ -203,6 +235,28 @@ class Avatar extends StatefulWidget {
     ///
     /// The default value for this parameter is `null`, but you can specify a function as a default value to be called if no function is selected.
     final OnPickerChangeWeb? onPickerChangeWeb,
+
+    /// [cropStyle] : crop image style
+    /// Default = cropStyle.circle
+    final CropStyle? cropStyle = CropStyle.circle,
+
+    /// [toolbarColor] : color toolbar picker for corp image
+    /// Default = Colors.deepOrange.
+    final Color toolbarColorCrop = Colors.deepOrange,
+
+    /// [toolbarWidgetColor] : color toolbar widget picker for corp image
+    /// Default = Colors.white.
+    final Color toolbarWidgetColorCrop = Colors.white,
+
+    /// [initAspectRatioCrop] desired aspect ratio is applied (from the list of given aspect ratio presets)
+    /// when starting the cropper
+    /// Default = CropAspectRatioPreset.original
+    final CropAspectRatioPresetData initAspectRatioCrop =
+        CropAspectRatioPreset.original,
+
+    /// [webPresentStyle] Presentation style of cropper, either a dialog or a page (route)
+    /// Default = WebPresentStyle.dialog
+    final WebPresentStyle webPresentStyle = WebPresentStyle.dialog,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text!);
@@ -232,6 +286,11 @@ class Avatar extends StatefulWidget {
       shadowColor: shadowColor,
       elevation: elevation,
       onPickerChangeWeb: onPickerChangeWeb,
+      cropStyle: cropStyle,
+      toolbarColorCrop: toolbarColorCrop,
+      toolbarWidgetColorCrop: toolbarWidgetColorCrop,
+      initAspectRatioCrop: initAspectRatioCrop,
+      webPresentStyle: webPresentStyle,
     );
   }
 

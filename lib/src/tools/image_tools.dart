@@ -26,37 +26,58 @@ class ImageTools {
     }
   }
 
-  Future<CroppedFile?> crop(XFile file, CropStyle cropStyle) async {
+  Future<CroppedFile?> crop(XFile file,
+      {CropStyle? cropStyle,
+      Color? toolbarColor,
+      Color? toolbarWidgetColor,
+      CropAspectRatioPresetData? initAspectRatio}) async {
     try {
       return await _imageCropper.cropImage(
         sourcePath: file.path,
-        cropStyle: cropStyle,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: toolbarColor!,
+            toolbarWidgetColor: toolbarWidgetColor!,
+            initAspectRatio: initAspectRatio!,
+            cropStyle: cropStyle!,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+            ],
+          ),
+          IOSUiSettings(
+            title: 'Cropper',
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.square,
+            ],
+          ),
+        ],
       );
     } catch (e) {
       if (kDebugMode) {
-        print('Crop Error: $e');
+        debugPrint('Crop Error: $e');
       }
       return null;
     }
   }
 
-  Future<Uint8List?> cropForWeb(
-      XFile file, CropStyle cropStyle, BuildContext context) async {
+  Future<Uint8List?> cropForWeb(XFile file,
+      {WebPresentStyle? presentStyle,
+      required BuildContext buildContext}) async {
     try {
       if (kIsWeb) {
         // For web platform
         final uiSettingsList = [
           WebUiSettings(
-            context: context,
-            enableExif: true,
-            enableZoom: true,
-            enableResize: true,
-            enableOrientation: true,
+            context: buildContext,
+            presentStyle: presentStyle!,
           )
         ];
         final croppedFile = await _imageCropper.cropImage(
           sourcePath: file.path,
-          cropStyle: cropStyle,
           uiSettings: uiSettingsList,
         );
         if (croppedFile != null) {
@@ -64,7 +85,7 @@ class ImageTools {
         }
       }
     } catch (e) {
-      print('Crop Error (Web): $e');
+      debugPrint('Crop Error (Web): $e');
     }
     return null;
   }
