@@ -91,7 +91,7 @@ class _AvatarExampleState extends State<AvatarExample> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Avatar.circle(
+                      Avatar(
                         onTapAvatar: () {},
                         radius: 35,
                         text: avatar[index],
