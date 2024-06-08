@@ -10,6 +10,8 @@ import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 
+export 'package:image_cropper/image_cropper.dart';
+
 typedef OnPickerChange = void Function(File file);
 
 extension AvatarCircleExtensions on Avatar {

@@ -3,14 +3,14 @@ import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class IsWeb extends StatelessWidget {
+class IsWebProfile extends StatelessWidget {
   /// Represents a profile widget.
   final Profile widget;
 
   /// Represents the image bytes for web.
   final Uint8List? imageBytesWeb;
 
-  const IsWeb({
+  const IsWebProfile({
     super.key,
     required this.widget,
     required this.imageBytesWeb,

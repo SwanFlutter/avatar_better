@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:avatar_better/src/widget/isborder_avatar.dart';
 import 'package:avatar_better/src/widget/none_border_avatar.dart';
-import 'package:avatar_better/web/isweb.dart';
+import 'package:avatar_better/web/isweb_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -171,7 +171,7 @@ class _ProfileState extends State<Profile> {
       child: Stack(
         children: [
           if (kIsWeb)
-            IsWeb(
+            IsWebProfile(
               widget: widget,
               imageBytesWeb: imageBytesWeb,
             )
@@ -245,7 +245,6 @@ class _ProfileState extends State<Profile> {
                         if (croppedFile != null) {
                           image = File(croppedFile.path);
                           widget.onPickerChange?.call(image!);
-
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         }
