@@ -79,34 +79,44 @@ class _AvatarExampleState extends State<AvatarExample> {
         child: SizedBox(
           width: size.width,
           height: size.height,
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: avatar.length,
-            itemBuilder: (context, index) {
-              // Check if the index is within the bounds of the list
-              if (index < avatar.length) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Avatar(
-                        onTapAvatar: () {},
-                        radius: 35,
-                        text: avatar[index],
-                        randomGradient: true,
-                        randomColor: false,
+          child: Column(
+            children: [
+              /*  ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: avatar.length,
+                itemBuilder: (context, index) {
+                  // Check if the index is within the bounds of the list
+                  if (index < avatar.length) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Avatar(
+                            onTapAvatar: () {},
+                            radius: 35,
+                            text: avatar[index],
+                            randomGradient: true,
+                            randomColor: false,
+                          ),
+                          Text(avatar[index]),
+                        ],
                       ),
-                      Text(avatar[index]),
-                    ],
-                  ),
-                );
-              } else {
-                // Return a placeholder widget if the index is out of bounds
-                return Container();
-              }
-            },
+                    );
+                  } else {
+                    // Return a placeholder widget if the index is out of bounds
+                    return Container();
+                  }
+                },
+              ),*/
+              const SizedBox(height: 25),
+              Avatar(
+                showPageViewOnTap: true,
+                text: "S",
+                imageNetwork: "https://i.pravatar.cc/300",
+              ),
+            ],
           ),
         ),
       ),

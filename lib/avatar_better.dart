@@ -163,7 +163,7 @@ class Avatar extends StatefulWidget {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
       gradientBackgroundColor =
-          GradiantRandomTools.getGradient(text.toString());
+          GradientRandomTools.getGradient(text.toString());
     } else {
       backgroundColor = backgroundColor;
     }
@@ -264,7 +264,7 @@ class Avatar extends StatefulWidget {
       backgroundColor = TextToColor.toColor(text!);
     } else if (randomGradient) {
       gradientBackgroundColor =
-          GradiantRandomTools.getGradient(text.toString());
+          GradientRandomTools.getGradient(text.toString());
     } else {
       backgroundColor = backgroundColor;
     }

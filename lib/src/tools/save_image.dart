@@ -1,22 +1,44 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class ImageSaver {
   static Future<File> saveImageFile(File fileImage) async {
-    final Directory downloadDirectory =
+    final PathProviderPlatform provider = PathProviderPlatform.instance;
+    String filePath = '';
+    Directory? downloadDirectoryWindows = await getDownloadsDirectory();
+    String? downloadDirectoryAndroid = await AndroidPathProvider.downloadsPath;
+    String? downloadDirectoryIos = await provider.getDownloadsPath();
+    String? downloadDirectoryMac = await provider.getDownloadsPath();
+
+    // بدست آوردن مسیر دانلود پیش‌فرض اندروید
+    final Directory defaultDownloadDirectory =
         Directory('/storage/emulated/0/Download');
 
-    String fileName = randomFileName(5);
+    String fileName = randomFileName(4);
 
-    if (!await downloadDirectory.exists()) {
-      await downloadDirectory.create(recursive: true);
+    if (kIsWeb &&
+        downloadDirectoryWindows != null &&
+        await downloadDirectoryWindows.exists()) {
+      filePath = '${downloadDirectoryWindows.path}/$fileName.jpg';
+    } else if (Platform.isAndroid) {
+      filePath = '$downloadDirectoryAndroid/$fileName.jpg';
+    } else if (Platform.isIOS && downloadDirectoryIos != null) {
+      filePath = '$downloadDirectoryIos/$fileName.jpg';
+    } else if (Platform.isMacOS && downloadDirectoryMac != null) {
+      filePath = '$downloadDirectoryMac/$fileName.jpg';
+    } else if (await defaultDownloadDirectory.exists() && Platform.isAndroid) {
+      filePath = '${defaultDownloadDirectory.path}/$fileName.jpg';
+    } else {
+      throw Exception('Download directory not found');
     }
 
-    final String filePath = '${downloadDirectory.path}/$fileName.jpeg';
     final File newImage = await fileImage.copy(filePath);
     return newImage;
   }

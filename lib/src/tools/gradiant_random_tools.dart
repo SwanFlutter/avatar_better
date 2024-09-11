@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-class GradiantRandomTools {
+class GradientRandomTools {
   static LinearGradient getGradient(String name) {
     final List<Color> colors = [
       Colors.red,
@@ -38,8 +40,11 @@ class GradiantRandomTools {
       Colors.yellow,
     ];
     final int hash = name.hashCode.abs();
-    final int index1 = hash % colors.length;
-    final int index2 = (hash + 1) % colors.length;
+    final Random random = Random(hash);
+    final int index1 = random.nextInt(colors.length);
+
+    int index2 = random.nextInt(colors.length);
+
     return LinearGradient(
       colors: [colors[index1], colors[index2]],
       begin: Alignment.bottomRight,
