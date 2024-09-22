@@ -2,14 +2,21 @@
 
 import 'dart:io';
 
+import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
+import 'package:avatar_better/src/tools/extensions/permissions_request.dart';
+import 'package:avatar_better/src/tools/extensions/text_to_color.dart';
 import 'package:avatar_better/src/tools/gradiant_random_tools.dart';
 import 'package:avatar_better/src/tools/gradient_circle_painter.dart';
-import 'package:avatar_better/src/tools/text_to_color.dart';
+import 'package:avatar_better/src/tools/options_crop.dart';
+import 'package:avatar_better/src/tools/profile_image_viewer_options.dart';
 import 'package:avatar_better/src/widget/page_view.dart';
 import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 
+export 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
+export 'package:avatar_better/src/tools/options_crop.dart';
+export 'package:avatar_better/src/tools/profile_image_viewer_options.dart';
+export 'package:flutter_saver/flutter_saver.dart';
 export 'package:image_cropper/image_cropper.dart';
 
 typedef OnPickerChange = void Function(File file);
@@ -108,30 +115,17 @@ class Avatar extends StatefulWidget {
   /// The PageView will contain the images specified by the imagePicker and imageAsset and Network properties.
   final bool showPageViewOnTap;
 
-  /// [stylePageViewTextName ]:the style of the PageView text appbar.
-  final TextStyle? stylePageViewTextName;
+  /// [profileImageViewerOptions]: The options for the profile image viewer.
+  final ProfileImageViewerOptions? profileImageViewerOptions;
 
-  /// [backgroundColorPageViewAppBar]: the background color of the PageView text appbar.
-  final Color? backgroundColorPageViewAppBar;
-
-  /// [onTapPageViewDelete]: A callback function for when the delete icon is tapped , deletes the image on the PageView .
-  final void Function()? onTapPageViewDelete;
-
-  /// [widgetLoadingPageView]:is an optional widget that is displayed while the PageView is loading.
-  final Widget? widgetLoadingPageView;
-
-  /// [backgroundColorDropdownMenuItem ]:is an optional parameter that specifies the background color of the dropdown menu item.
-  final Color? backgroundColorDropdownMenuItem;
-
-  /// [iconColorDropdownMenuItem ]:is an optional parameter that specifies the icon color of the dropdown menu item.
-  final Color? iconColorDropdownMenuItem;
-
-  /// [backBottomColorPageView]:is an optional parameter that specifies the  color of the bottom of the dropdown menu.
-  final Color? backBottomColorPageView;
+  /// [itemsBuilderDropdownMenuItem]: The builder function for the dropdown menu items in page view.
+  final List<DropdownMenuItem<String>>? Function(int index)?
+      itemsBuilderDropdownMenuItem;
 
   Avatar({
     super.key,
     required this.text,
+    this.profileImageViewerOptions,
     this.onTapAvatar,
     this.radius = 35,
     this.image,
@@ -139,14 +133,6 @@ class Avatar extends StatefulWidget {
     this.listImageNetwork,
     this.backgroundColor,
     this.gradientBackgroundColor,
-    this.stylePageViewTextName = const TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0),
-    this.backgroundColorPageViewAppBar = Colors.white,
-    this.onTapPageViewDelete,
-    this.widgetLoadingPageView,
-    this.backgroundColorDropdownMenuItem = Colors.white,
-    this.iconColorDropdownMenuItem = Colors.black,
-    this.backBottomColorPageView = Colors.black,
     this.shadowColor = Colors.black,
     this.gradientWidthBorder =
         const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
@@ -154,6 +140,7 @@ class Avatar extends StatefulWidget {
     this.widthBorder = 5.0,
     this.isBorderAvatar = false,
     this.showPageViewOnTap = false,
+    this.itemsBuilderDropdownMenuItem = defaultItemsBuilder,
     this.style = const TextStyle(
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
@@ -238,27 +225,11 @@ class Avatar extends StatefulWidget {
     /// The default value for this parameter is `null`, but you can specify a function as a default value to be called if no function is selected.
     final OnPickerChangeWeb? onPickerChangeWeb,
 
-    /// [cropStyle] : crop image style
-    /// Default = cropStyle.circle
-    final CropStyle? cropStyle = CropStyle.circle,
+    /// [OptionsCrop] : Configuration options for image cropping functionality.
+    final OptionsCrop? optionsCrop,
 
-    /// [toolbarColor] : color toolbar picker for corp image
-    /// Default = Colors.deepOrange.
-    final Color toolbarColorCrop = Colors.deepOrange,
-
-    /// [toolbarWidgetColor] : color toolbar widget picker for corp image
-    /// Default = Colors.white.
-    final Color toolbarWidgetColorCrop = Colors.white,
-
-    /// [initAspectRatioCrop] desired aspect ratio is applied (from the list of given aspect ratio presets)
-    /// when starting the cropper
-    /// Default = CropAspectRatioPreset.original
-    final CropAspectRatioPresetData initAspectRatioCrop =
-        CropAspectRatioPreset.original,
-
-    /// [webPresentStyle] Presentation style of cropper, either a dialog or a page (route)
-    /// Default = WebPresentStyle.dialog
-    final WebPresentStyle webPresentStyle = WebPresentStyle.dialog,
+    /// [BottomSheetStyles] : Configuration for customizing the bottom sheet's appearance and behavior.
+    final BottomSheetStyles? bottomSheetStyles,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text!);
@@ -288,19 +259,25 @@ class Avatar extends StatefulWidget {
       shadowColor: shadowColor,
       elevation: elevation,
       onPickerChangeWeb: onPickerChangeWeb,
-      cropStyle: cropStyle,
-      toolbarColorCrop: toolbarColorCrop,
-      toolbarWidgetColorCrop: toolbarWidgetColorCrop,
-      initAspectRatioCrop: initAspectRatioCrop,
-      webPresentStyle: webPresentStyle,
+      optionsCrop: optionsCrop,
+      bottomSheetStyles: bottomSheetStyles,
     );
   }
 
   @override
   State<Avatar> createState() => _AvatarState();
+  static List<DropdownMenuItem<String>> defaultItemsBuilder(int index) {
+    return [];
+  }
 }
 
 class _AvatarState extends State<Avatar> {
+  @override
+  void initState() {
+    handlePermissions();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     File? imagePicker;
@@ -316,14 +293,21 @@ class _AvatarState extends State<Avatar> {
                     imagePicker: imagePicker,
                     listImageNetwork: widget.listImageNetwork,
                     namePageview: widget.text!.toLowerCase(),
-                    backBottomColor: widget.backBottomColorPageView,
-                    backgroundColorDropdownMenuItem:
-                        widget.backgroundColorDropdownMenuItem,
-                    iconColorDropdownMenuItem: widget.iconColorDropdownMenuItem,
-                    backgroundColorPageViewAppBar:
-                        widget.backgroundColorPageViewAppBar,
-                    onTapPageViewDelete: widget.onTapPageViewDelete,
-                    widgetLoadingPageView: widget.widgetLoadingPageView,
+                    backBottomColor: widget
+                        .profileImageViewerOptions?.backBottomColorPageView,
+                    backgroundColorDropdownMenuItem: widget
+                        .profileImageViewerOptions
+                        ?.backgroundColorDropdownMenuItem,
+                    iconColorDropdownMenuItem: widget
+                        .profileImageViewerOptions?.iconColorDropdownMenuItem,
+                    backgroundColorPageViewAppBar: widget
+                        .profileImageViewerOptions
+                        ?.backgroundColorPageViewAppBar,
+                    widgetLoadingPageView:
+                        widget.profileImageViewerOptions?.widgetLoadingPageView,
+                    fitBackgroundImage:
+                        widget.profileImageViewerOptions?.fitBackgroundImage,
+                    widget: widget,
                   ),
                 ),
               );

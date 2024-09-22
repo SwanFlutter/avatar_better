@@ -9,3 +9,9 @@
 ## 0.0.7
 
 * Update Pack.
+
+## 0.0.8
+
+* Update Pack.
+* Support platform windows and mac.
+* Add new feature.

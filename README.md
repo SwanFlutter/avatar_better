@@ -25,7 +25,7 @@ This is a complete avatar package that you can use for your profile and avatar
 
 ```yaml
 dependencies:
-  avatar_better: ^0.0.7
+  avatar_better: ^0.0.8
 ```
 
 ## How to use
@@ -41,21 +41,50 @@ import 'package:avatar_better/avatar_better.dart';
 
 - To request permissions from the user, you can use the following code: AndroidManifest.xml.
 
-```
+```xml
 <uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+<!-- For Android 10 and above, to access external storage -->
+<uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+
+<!-- For Android 12 and above -->
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage"/>
+
 
 ```
 
+
+- For Android versions 33 and above (Android 13):
+
+```xml
+
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+<uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+```
+
+- Camera and internet access.
+
+```xml
+
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.CAMERA" />
+
+```
 
 - Add this line code to application AndroidManifest.xml
 
-```
+```xml
 android:requestLegacyExternalStorage="true"
 ```
 
-```
+```xml
 <application
         android:label="avaterbetter"
         android:name="${applicationName}"
@@ -72,6 +101,15 @@ android:requestLegacyExternalStorage="true"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 ````
 
+```xml
+<queries>
+    <intent>
+        <action android:name="android.intent.action.GET_CONTENT" />
+    </intent>
+</queries>
+
+```
+
 ### iOS
 
 ```xml
@@ -79,6 +117,18 @@ android:requestLegacyExternalStorage="true"
     <string>We need access to your photo library to select images for editing.</string>
     <key>NSCameraUsageDescription</key>
     <string>We need access to your camera to take photos for editing.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>App needs access to your photo library to read images.</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+    <string>App needs access to the microphone to record audio.</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>App needs access to your photo library to save images and videos.</string>
+
+
+
 ```
 
 #### macOS installation
@@ -113,33 +163,34 @@ add a filesystem access
 
 ```dart
  Avatar(
-/// With this function, you can display page shift or page view in a personalized way.
-onTapAvatar: () {},
-radius: 35,
-text: avatar[index],
-randomGradient: true,
-randomColor: false,
-imageNetwork:
- "https://images.unsplash.com/photo-1616731948638-b0d0befef759?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-
- /// By activating this option, the user can see the avatar images in the page view
+    text: "Mic",
+  radius: 50,
   showPageViewOnTap: true,
-                
-),
+   itemsBuilderDropdownMenuItem: (index) {
+     return [];
+    },
+     profileImageViewerOptions: ProfileImageViewerOptions(
+      fitBackgroundImage: BoxFit.fitHeight,
+      ),
+     imageNetwork:
+             "https://platinumlist.net/guide/wp-content/uploads/2023/03/IMG-worlds-of-adventure.webp",
+   ),
 ```
 
 ```dart
 Avatar.profile(
-radius: 35,
-text: avatar[index],
-randomGradient: true,
-randomColor: false,
-),                           
+     text: "Mic",
+      radius: 50,
+    bottomSheetStyles: BottomSheetStyles(
+  backgroundColor: Colors.red,
+   elevation: 2,
+  middleText: 'OR',
+ middleTextStyle: const TextStyle(color: Colors.white)),
+onPickerChange: () {},
+ onPickerChangeWeb: (file) { },
+ optionsCrop: OptionsCrop(),
+  ),                   
 ```
-Buy me a cup of coffee for 5$.
-
-[![1281229923](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/fd75ec2b-5123-4202-a0a5-85d07adba708)](https://www.swanflutterdev.site/pay.html)
-
 
 
 ## Additional information

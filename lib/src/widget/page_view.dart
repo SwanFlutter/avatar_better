@@ -1,9 +1,11 @@
+// ignore_for_file: must_be_immutable, unrelated_type_equality_checks, use_build_context_synchronously, unnecessary_null_comparison, unused_local_variable
+
 import 'dart:io';
 
-import 'package:avatar_better/src/tools/save_image.dart';
+import 'package:avatar_better/avatar_better.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_downloader_web/image_downloader_web.dart';
+import 'package:zoom_hover_pinch_image/zoom_hover_pinch_image.dart';
 
 class PageViewAvatar extends StatefulWidget {
   ///
@@ -16,7 +18,7 @@ class PageViewAvatar extends StatefulWidget {
   final String? image;
 
   /// Represents a network image URL.
-  final String? imageNetwork;
+  late String? imageNetwork;
 
   /// Represents an image selected from the device's storage.
   final File? imagePicker;
@@ -30,9 +32,6 @@ class PageViewAvatar extends StatefulWidget {
   /// Represents the background color of the app bar in the page view.
   final Color? backgroundColorPageViewAppBar;
 
-  /// Represents the callback function triggered when the delete button in the page view is tapped.
-  final void Function()? onTapPageViewDelete;
-
   /// Represents the widget to be displayed while loading the page view.
   final Widget? widgetLoadingPageView;
 
@@ -45,9 +44,15 @@ class PageViewAvatar extends StatefulWidget {
   /// Represents the background color of the bottom section.
   final Color? backBottomColor;
 
-  const PageViewAvatar({
+  /// Represents the fit of the background image.
+  final BoxFit? fitBackgroundImage;
+
+  final Avatar widget;
+
+  PageViewAvatar({
     super.key,
     required this.imagePicker,
+    required this.widget,
     this.image,
     this.imageNetwork,
     this.listImageNetwork,
@@ -55,11 +60,11 @@ class PageViewAvatar extends StatefulWidget {
     this.stylePageViewTextName = const TextStyle(
         fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0),
     this.backgroundColorPageViewAppBar = Colors.white,
-    this.onTapPageViewDelete,
     this.widgetLoadingPageView,
     this.backgroundColorDropdownMenuItem = Colors.white,
     this.iconColorDropdownMenuItem = Colors.black,
     this.backBottomColor = Colors.black,
+    this.fitBackgroundImage = BoxFit.fitHeight,
   });
 
   @override
@@ -70,6 +75,7 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
   late PageController _pageController;
   final pageController = PageController();
   late int imageIndex;
+  late int indexForPageView = 0;
 
   @override
   void initState() {
@@ -91,89 +97,36 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
       sortedListImage.add(sortedListImageNetwork[i]);
     }
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(color: widget.backBottomColor),
-          title: Text(
-            widget.namePageview != null ? widget.namePageview! : "",
-            style: widget.stylePageViewTextName,
-          ),
-          backgroundColor: widget.backgroundColorPageViewAppBar ??
-              Theme.of(context).primaryColorLight,
-          actions: [
-            DropdownButton(
-              dropdownColor: widget.backgroundColorDropdownMenuItem ??
-                  Theme.of(context).primaryColorLight,
-              icon: Icon(Icons.more_vert,
-                  color: widget.iconColorDropdownMenuItem),
-              underline: const Divider(color: Colors.transparent),
-              items: [
-                DropdownMenuItem<String>(
-                  value: 'save',
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.image),
-                      Text('Save to Gallery '),
-                      Text(''),
-                    ],
-                  ),
-                  onTap: () async {
-                    if (kIsWeb) {
-                      if (widget.imageNetwork != null) {
-                        await WebImageDownloader.downloadImageFromWeb(
-                            widget.imageNetwork!);
-                      } else if (widget.imagePicker != null) {
-                        await WebImageDownloader.downloadImageFromWeb(
-                            widget.imagePicker!.path);
-                      } else if (widget.listImageNetwork != null &&
-                          widget.listImageNetwork!.isNotEmpty) {
-                        await WebImageDownloader.downloadImageFromWeb(
-                            widget.listImageNetwork![imageIndex]);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            padding: EdgeInsets.all(15.0),
-                            shape: BeveledRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0)),
-                            ),
-                            content: Text(
-                              "No valid image to download",
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
-                      if (widget.imagePicker != null) {
-                        await ImageSaver.saveImageFile(widget.imagePicker!);
-                      } else if (widget.imageNetwork != null) {
-                        await ImageSaver.saveImage(widget.imageNetwork!);
-                      } else if (widget.listImageNetwork != null &&
-                          widget.listImageNetwork!.isNotEmpty) {
-                        await ImageSaver.saveImage(
-                            widget.listImageNetwork![imageIndex]);
-                      } else {
-                        // اگر هیچ یک از شرایط بالا برقرار نبود، یک پیغام خطا یا اطلاعیه مناسب برگردانید.
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            padding: EdgeInsets.all(15.0),
-                            shape: BeveledRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0)),
-                            ),
-                            content: Text(
-                              "No valid image to download",
-                            ),
-                          ),
-                        );
-                      }
-                    }
-
-                    // ignore: use_build_context_synchronously
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        leading: BackButton(color: widget.backBottomColor),
+        title: Text(
+          widget.namePageview != null ? widget.namePageview! : "",
+          style: widget.stylePageViewTextName,
+        ),
+        backgroundColor: widget.backgroundColorPageViewAppBar ??
+            Theme.of(context).primaryColorLight,
+        actions: [
+          DropdownButton(
+            dropdownColor: widget.backgroundColorDropdownMenuItem ??
+                Theme.of(context).primaryColorLight,
+            icon:
+                Icon(Icons.more_vert, color: widget.iconColorDropdownMenuItem),
+            underline: const Divider(color: Colors.transparent),
+            items: [
+              DropdownMenuItem<String>(
+                value: 'save',
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.image),
+                    Text('Save to Gallery '),
+                    Text(''),
+                  ],
+                ),
+                onTap: () async {
+                  void showSnackBar(BuildContext context, bool isSaved) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         behavior: SnackBarBehavior.floating,
@@ -181,47 +134,116 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                         shape: const BeveledRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
-                        content: Text(
-                          (widget.image != null &&
-                                  widget.imageNetwork == null &&
-                                  widget.imagePicker == null &&
-                                  widget.listImageNetwork == null)
-                              ? "The image cannot be downloaded"
-                              : "Save to gallery",
-                        ),
+                        content: Text(isSaved
+                            ? 'Image saved successfully!'
+                            : 'Failed to save image.'),
                       ),
                     );
-                  },
-                ),
-                DropdownMenuItem<String>(
-                  value: 'delete',
-                  onTap: widget.onTapPageViewDelete,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.delete),
-                      Text('Delete'),
-                      Text(''),
-                    ],
-                  ),
-                ),
-              ],
-              onChanged: (String? value) {},
-            ),
-          ],
-        ),
-        body: widget.imagePicker == null &&
-                widget.image == null &&
-                widget.imageNetwork == null &&
-                widget.listImageNetwork != null
-            ?
-            // ignore: unnecessary_null_comparison
-            widget.listImageNetwork != null
-                ? PageView.builder(
+                  }
+
+                  if (widget.imagePicker != null) {
+                    if (kIsWeb) {
+                      bool isSaved = await FlutterSaver.saveImageWindowsWeb(
+                        fileImage: widget.imagePicker!,
+                      );
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isAndroid) {
+                      bool isSaved = await FlutterSaver.saveImageAndroid(
+                          fileImage: widget.imagePicker!);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isIOS) {
+                      bool isSaved = await FlutterSaver.saveImageIos(
+                          fileImage: widget.imagePicker!);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isWindows) {
+                      bool isSaved = await FlutterSaver.saveImageWindowsWeb(
+                          fileImage: widget.imagePicker!);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isMacOS) {
+                      bool isSaved = await FlutterSaver.saveImageIos(
+                          fileImage: widget.imagePicker!);
+                      showSnackBar(context, isSaved);
+                    } else {
+                      debugPrint('Failed to save image. Unsupported platform.');
+                    }
+                  } else if (widget.imageNetwork != null) {
+                    if (kIsWeb) {
+                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(
+                        link: widget.imageNetwork!,
+                      );
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isAndroid) {
+                      bool isSaved = await FlutterSaver.saveFileAndroid(
+                          link: widget.imageNetwork!);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isIOS) {
+                      bool isSaved = await FlutterSaver.saveFileIos(
+                          link: widget.imageNetwork!);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isWindows) {
+                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(
+                          link: widget.imageNetwork!);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isMacOS) {
+                      bool isSaved = await FlutterSaver.saveFileMac(
+                          link: widget.imageNetwork!);
+                      showSnackBar(context, isSaved);
+                    } else {
+                      debugPrint('Failed to save image. Unsupported platform.');
+                    }
+                  } else if (widget.listImageNetwork != null) {
+                    if (kIsWeb) {
+                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(
+                        link: widget.listImageNetwork!.last,
+                      );
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isAndroid) {
+                      bool isSaved = await FlutterSaver.saveFileAndroid(
+                          link: widget.listImageNetwork!.last);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isIOS) {
+                      bool isSaved = await FlutterSaver.saveFileIos(
+                          link: widget.listImageNetwork!.last);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isWindows) {
+                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(
+                          link: widget.listImageNetwork!.last);
+                      showSnackBar(context, isSaved);
+                    } else if (Platform.isMacOS) {
+                      bool isSaved = await FlutterSaver.saveFileMac(
+                          link: widget.listImageNetwork!.last);
+                      showSnackBar(context, isSaved);
+                    } else {
+                      debugPrint('Failed to save image. Unsupported platform.');
+                    }
+                  } else {
+                    debugPrint('Failed to save image. Unsupported platform.');
+                  }
+                },
+              ),
+              ...?widget.widget.itemsBuilderDropdownMenuItem!(indexForPageView)
+            ],
+            onChanged: (String? value) {},
+          ),
+        ],
+      ),
+      body: widget.imagePicker == null &&
+              widget.image == null &&
+              widget.imageNetwork == null &&
+              widget.listImageNetwork != null
+          ? widget.listImageNetwork != null
+              ? Zoom.zoomOnTap(
+                  zoomedScale: 3.0,
+                  doubleTapZoom: true,
+                  clipBehavior: true,
+                  width: size.width,
+                  height: size.height,
+                  child: PageView.builder(
                     reverse: true,
                     controller: _pageController,
                     itemCount: sortedListImage.length,
                     itemBuilder: (context, index) {
+                      indexForPageView = index;
                       imageIndex = widget.listImageNetwork!.indexOf(
                         sortedListImage[index],
                       );
@@ -230,18 +252,25 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                           sortedListImage[index],
                           width: size.width,
                           height: size.height,
-                          fit: BoxFit.cover,
+                          fit: widget.fitBackgroundImage,
                         );
                       } else {
                         return Container(); // یک ویجت خالی به عنوان fallback
                       }
                     },
-                  )
-                : Center(
-                    child: widget.widgetLoadingPageView ??
-                        const CircularProgressIndicator(),
-                  )
-            : PageView(
+                  ),
+                )
+              : Center(
+                  child: widget.widgetLoadingPageView ??
+                      const CircularProgressIndicator(),
+                )
+          : Zoom.zoomOnTap(
+              zoomedScale: 3.0,
+              doubleTapZoom: true,
+              clipBehavior: true,
+              width: size.width,
+              height: size.height,
+              child: PageView(
                 controller: pageController,
                 children: [
                   if (widget.imagePicker != null)
@@ -249,25 +278,25 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                       widget.imagePicker!,
                       width: size.width,
                       height: size.height,
-                      fit: BoxFit.cover,
+                      fit: widget.fitBackgroundImage,
                     ),
                   if (widget.imageNetwork != null)
                     Image.network(
                       widget.imageNetwork!,
                       width: size.width,
                       height: size.height,
-                      fit: BoxFit.cover,
+                      fit: widget.fitBackgroundImage,
                     ),
                   if (widget.image != null)
                     Image.asset(
                       widget.image!,
                       width: size.width,
                       height: size.height,
-                      fit: BoxFit.cover,
+                      fit: widget.fitBackgroundImage,
                     )
                 ],
               ),
-      ),
+            ),
     );
   }
 }

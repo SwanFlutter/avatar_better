@@ -1,7 +1,9 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'dart:io';
 
+import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
+import 'package:avatar_better/src/tools/options_crop.dart';
 import 'package:avatar_better/src/widget/isborder_avatar.dart';
 import 'package:avatar_better/src/widget/none_border_avatar.dart';
 import 'package:avatar_better/web/isweb_profile.dart';
@@ -10,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../tools/extensions/image_tools.dart';
+import '../tools/extensions/text_to_color.dart';
 import '../tools/gradiant_random_tools.dart';
-import '../tools/image_tools.dart';
-import '../tools/text_to_color.dart';
 
 typedef OnPickerChange = void Function(File file);
 typedef OnPickerChangeWeb = void Function(Uint8List file);
@@ -96,26 +98,11 @@ class Profile extends StatefulWidget {
   /// [onPickerChangeWeb] :is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
   final OnPickerChangeWeb? onPickerChangeWeb;
 
-  /// [cropStyle] : crop image style
-  /// Default = cropStyle.circle
-  final CropStyle? cropStyle;
+  /// [OptionsCrop] : Configuration options for image cropping functionality.
+  final OptionsCrop? optionsCrop;
 
-  /// [toolbarColor] : color toolbar picker for corp image
-  /// Default = Colors.deepOrange.
-  final Color toolbarColorCrop;
-
-  /// [toolbarWidgetColor] : color toolbar widget picker for corp image
-  /// Default = Colors.white.
-  final Color toolbarWidgetColorCrop;
-
-  /// [initAspectRatioCrop] desired aspect ratio is applied (from the list of given aspect ratio presets)
-  /// when starting the cropper
-  /// Default = CropAspectRatioPreset.original
-  final CropAspectRatioPresetData initAspectRatioCrop;
-
-  /// [webPresentStyle] Presentation style of cropper, either a dialog or a page (route)
-  /// Default = WebPresentStyle.dialog
-  final WebPresentStyle webPresentStyle;
+  /// [BottomSheetStyles] : Configuration for customizing the bottom sheet's appearance and behavior.
+  final BottomSheetStyles? bottomSheetStyles;
 
   Profile({
     super.key,
@@ -130,17 +117,14 @@ class Profile extends StatefulWidget {
     this.shadowColor = Colors.black,
     this.isBorderAvatar = false,
     this.backgroundColor = Colors.green,
-    this.cropStyle = CropStyle.circle,
-    this.toolbarColorCrop = Colors.deepOrange,
-    this.toolbarWidgetColorCrop = Colors.white,
-    this.initAspectRatioCrop = CropAspectRatioPreset.original,
-    this.webPresentStyle = WebPresentStyle.dialog,
+    this.bottomSheetStyles,
     this.gradientWidthBorder =
         const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
     this.iconColor = Colors.black,
     this.widthBorder = 5.0,
     this.backgroundColorCamera = Colors.white,
     this.icon = Icons.camera,
+    this.optionsCrop,
     this.style = const TextStyle(
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
@@ -181,9 +165,7 @@ class _ProfileState extends State<Profile> {
                 : NoneBorderAvatar(widget: widget, image: image),
           Positioned(
             bottom: widget.radius != null ? widget.radius! / 11 : 0,
-            right: widget.radius != null
-                ? widget.radius! / 11
-                : 0, // نصف ارتفاع AvatarCircle
+            right: widget.radius != null ? widget.radius! / 11 : 0,
             child: InkResponse(
               onTap: () {
                 customBottomPickerImage();
@@ -207,6 +189,9 @@ class _ProfileState extends State<Profile> {
 
   void customBottomPickerImage() {
     showModalBottomSheet(
+      backgroundColor: widget.bottomSheetStyles?.backgroundColor,
+      elevation: widget.bottomSheetStyles?.elevation,
+      shape: widget.bottomSheetStyles?.shape,
       context: context,
       builder: (context) {
         Size size = MediaQuery.of(context).size;
@@ -221,121 +206,167 @@ class _ProfileState extends State<Profile> {
                   final List<XFile> file =
                       await imageModel.pickImage(ImageSource.gallery, false);
 
-                  if (file.isNotEmpty) {
-                    final croppedFile = await imageModel.crop(file.first,
-                        cropStyle: widget.cropStyle,
-                        toolbarColor: widget.toolbarColorCrop,
-                        toolbarWidgetColor: widget.toolbarWidgetColorCrop,
-                        initAspectRatio: widget.initAspectRatioCrop);
-                    // ignore: use_build_context_synchronously
-                    final croppedImageBytes = await imageModel.cropForWeb(
-                      file.first,
-                      presentStyle: widget.webPresentStyle,
-                      // ignore: use_build_context_synchronously
-                      buildContext: context,
-                    );
+                  if (file.isNotEmpty && file.first != null) {
+                    // Cropping for mobile platforms (Android and iOS)
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      final croppedFile = await imageModel.crop(
+                        file.first,
+                        cropStyle:
+                            widget.optionsCrop?.cropStyle ?? CropStyle.circle,
+                        toolbarColor: widget.optionsCrop?.toolbarColorCrop ??
+                            Colors.deepOrange,
+                        toolbarWidgetColor:
+                            widget.optionsCrop?.toolbarWidgetColorCrop ??
+                                Colors.white,
+                        initAspectRatio:
+                            widget.optionsCrop?.initAspectRatioCrop ??
+                                CropAspectRatioPreset.original,
+                      );
 
-                    if (kIsWeb && croppedImageBytes != null) {
-                      setState(() {
-                        imageBytesWeb = croppedImageBytes;
-                        widget.onPickerChangeWeb?.call(imageBytesWeb!);
-                      });
-                    } else {
-                      setState(() {
-                        if (croppedFile != null) {
+                      if (croppedFile != null) {
+                        setState(() {
                           image = File(croppedFile.path);
                           widget.onPickerChange?.call(image!);
-                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
-                        }
+                        });
+                      }
+                    }
+                    // For web
+                    else if (kIsWeb) {
+                      final croppedImageBytes = await imageModel.cropForWeb(
+                        file.first,
+                        presentStyle: widget.optionsCrop?.webPresentStyle ??
+                            WebPresentStyle.dialog,
+                        buildContext: context,
+                      );
+
+                      if (croppedImageBytes != null) {
+                        setState(() {
+                          imageBytesWeb = croppedImageBytes;
+                          widget.onPickerChangeWeb?.call(imageBytesWeb!);
+                        });
+                      }
+                    }
+                    // For Windows, Mac, and Linux without cropping
+                    else if (Platform.isWindows || Platform.isMacOS) {
+                      setState(() {
+                        image = File(file.first.path);
+                        widget.onPickerChange?.call(image!);
+                        Navigator.pop(context);
                       });
                     }
+                  } else {
+                    debugPrint('Error: No file selected or file is null.');
                   }
                 },
                 child: Material(
                   borderRadius: BorderRadius.circular(12.0),
                   elevation: 5,
-                  color: Colors.grey[100],
+                  color: widget.bottomSheetStyles?.galleryButton?.color,
                   child: Container(
                     alignment: Alignment.center,
                     width: size.width * 0.90,
                     height: 50,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.image_outlined,
+                        if (widget.bottomSheetStyles?.galleryButton?.icon !=
+                            null)
+                          widget.bottomSheetStyles!.galleryButton!.icon!,
+                        Text(
+                          widget.bottomSheetStyles?.galleryButton?.text ??
+                              "Browse Gallery",
+                          style: widget.bottomSheetStyles?.galleryButton?.style,
                         ),
-                        Text("Browse Gallery")
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Center(
-                child: Text("Or"),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              InkWell(
-                onTap: () async {
-                  final List<XFile> file =
-                      await imageModel.pickImage(ImageSource.camera, false);
+              const SizedBox(height: 5),
+              Platform.isMacOS || Platform.isWindows
+                  ? const Text("")
+                  : Center(
+                      child: Text(
+                        widget.bottomSheetStyles?.middleText ?? "OR",
+                        style: widget.bottomSheetStyles?.middleTextStyle,
+                      ),
+                    ),
+              const SizedBox(height: 5),
+              // Show camera button only on Android and iOS
+              if (Platform.isAndroid || Platform.isIOS)
+                InkWell(
+                  onTap: () async {
+                    final List<XFile> file =
+                        await imageModel.pickImage(ImageSource.camera, false);
 
-                  if (file.isNotEmpty) {
-                    final croppedFile = await imageModel.crop(file.first,
-                        cropStyle: widget.cropStyle,
-                        toolbarColor: widget.toolbarColorCrop,
-                        toolbarWidgetColor: widget.toolbarWidgetColorCrop,
-                        initAspectRatio: widget.initAspectRatioCrop);
-                    // ignore: use_build_context_synchronously
-                    final croppedImageBytes = await imageModel.cropForWeb(
-                      file.first,
-                      presentStyle: widget.webPresentStyle,
-                      // ignore: use_build_context_synchronously
-                      buildContext: context,
-                    );
+                    if (file.isNotEmpty && file.first != null) {
+                      if (Platform.isAndroid || Platform.isIOS) {
+                        final croppedFile = await imageModel.crop(
+                          file.first,
+                          cropStyle:
+                              widget.optionsCrop?.cropStyle ?? CropStyle.circle,
+                          toolbarColor: widget.optionsCrop?.toolbarColorCrop ??
+                              Colors.deepOrange,
+                          toolbarWidgetColor:
+                              widget.optionsCrop?.toolbarWidgetColorCrop ??
+                                  Colors.white,
+                          initAspectRatio:
+                              widget.optionsCrop?.initAspectRatioCrop ??
+                                  CropAspectRatioPreset.original,
+                        );
 
-                    if (kIsWeb && croppedImageBytes != null) {
-                      setState(() {
-                        imageBytesWeb = croppedImageBytes;
-                        widget.onPickerChangeWeb?.call(imageBytesWeb!);
-                      });
-                    } else {
-                      setState(() {
                         if (croppedFile != null) {
-                          image = File(croppedFile.path);
-                          widget.onPickerChange?.call(image!);
-
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
+                          setState(() {
+                            image = File(croppedFile.path);
+                            widget.onPickerChange?.call(image!);
+                            Navigator.pop(context);
+                          });
                         }
-                      });
+                      } else if (kIsWeb) {
+                        final croppedImageBytes = await imageModel.cropForWeb(
+                          file.first,
+                          presentStyle: widget.optionsCrop?.webPresentStyle ??
+                              WebPresentStyle.dialog,
+                          buildContext: context,
+                        );
+
+                        if (croppedImageBytes != null) {
+                          setState(() {
+                            imageBytesWeb = croppedImageBytes;
+                            widget.onPickerChangeWeb?.call(imageBytesWeb!);
+                          });
+                        }
+                      }
+                    } else {
+                      debugPrint('Error: No file selected or file is null.');
                     }
-                  }
-                },
-                child: Material(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12.0),
-                  elevation: 5,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: size.width * 0.90,
-                    height: 50,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.camera_alt_outlined),
-                        Text("Usa camera"),
-                      ],
+                  },
+                  child: Material(
+                    color: widget.bottomSheetStyles?.cameraButton?.color,
+                    borderRadius: BorderRadius.circular(12.0),
+                    elevation: 5,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: size.width * 0.90,
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (widget.bottomSheetStyles?.cameraButton?.icon !=
+                              null)
+                            widget.bottomSheetStyles!.cameraButton!.icon!,
+                          Text(
+                            widget.bottomSheetStyles?.cameraButton?.text ??
+                                "Use Camera",
+                            style:
+                                widget.bottomSheetStyles?.cameraButton?.style,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         );
