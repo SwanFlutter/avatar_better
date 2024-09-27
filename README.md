@@ -1,6 +1,6 @@
 This is a complete avatar package that you can use for your profile and avatar.
 
-If you want to have the same avatar without crop, use this package :
+If you want to have the same avatar without crop, use this package: [avatar_better_pro](https://pub.dev/packages/avatar_better_pro)
 
 ## Features
 
@@ -22,6 +22,9 @@ If you want to have the same avatar without crop, use this package :
 
 ![CaptureWeb](https://github.com/SwanFlutter/avatar_better/assets/151648897/25948b33-eaeb-4aa8-bc25-d8361a604dca)
 ![CaptureAvatar](https://github.com/SwanFlutter/avatar_better/assets/151648897/abff37b2-fc3b-448d-9563-cc11126c4cd5)
+
+![Capture](https://github.com/user-attachments/assets/38d6a92f-1a79-4bee-b062-2404a33f638e)
+
 
 
 
