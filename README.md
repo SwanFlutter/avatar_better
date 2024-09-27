@@ -32,7 +32,7 @@ If you want to have the same avatar without crop, use this package: [avatar_bett
 
 ```yaml
 dependencies:
-  avatar_better: ^0.0.9
+  avatar_better: ^0.0.9+1
 ```
 
 ## How to use

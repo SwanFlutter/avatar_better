@@ -20,3 +20,7 @@
 ## 0.0.9
 
 * Support all platform cropper image.
+
+## 0.0.9+1
+
+* Adit README.md.
