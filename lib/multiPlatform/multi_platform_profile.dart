@@ -56,7 +56,10 @@ class MultiPlatform extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: decorationImage,
                 ),
-                child: (imageBytesWeb == null && widget.imageNetwork == null && widget.image == null && widget.text != null)
+                child: (imageBytesWeb == null &&
+                        widget.imageNetwork == null &&
+                        widget.image == null &&
+                        widget.text != null)
                     ? Text(
                         ProfileExtensions.initials(widget.text!),
                         style: widget.style,
@@ -81,7 +84,10 @@ class MultiPlatform extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: decorationImage,
               ),
-              child: (imageBytesWeb == null && widget.imageNetwork == null && widget.image == null && widget.text != null)
+              child: (imageBytesWeb == null &&
+                      widget.imageNetwork == null &&
+                      widget.image == null &&
+                      widget.text != null)
                   ? Text(
                       ProfileExtensions.initials(widget.text!),
                       style: widget.style,
