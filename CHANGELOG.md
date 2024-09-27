@@ -15,3 +15,8 @@
 * Update Pack.
 * Support platform windows and mac.
 * Add new feature.
+
+
+## 0.0.9
+
+* Support all platform cropper image.

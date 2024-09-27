@@ -3,14 +3,14 @@ import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class IsWebProfile extends StatelessWidget {
+class MultiPlatform extends StatelessWidget {
   /// Represents a profile widget.
   final Profile widget;
 
   /// Represents the image bytes for web.
   final Uint8List? imageBytesWeb;
 
-  const IsWebProfile({
+  const MultiPlatform({
     super.key,
     required this.widget,
     required this.imageBytesWeb,
@@ -56,10 +56,7 @@ class IsWebProfile extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: decorationImage,
                 ),
-                child: (imageBytesWeb == null &&
-                        widget.imageNetwork == null &&
-                        widget.image == null &&
-                        widget.text != null)
+                child: (imageBytesWeb == null && widget.imageNetwork == null && widget.image == null && widget.text != null)
                     ? Text(
                         ProfileExtensions.initials(widget.text!),
                         style: widget.style,
@@ -84,10 +81,7 @@ class IsWebProfile extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: decorationImage,
               ),
-              child: (imageBytesWeb == null &&
-                      widget.imageNetwork == null &&
-                      widget.image == null &&
-                      widget.text != null)
+              child: (imageBytesWeb == null && widget.imageNetwork == null && widget.image == null && widget.text != null)
                   ? Text(
                       ProfileExtensions.initials(widget.text!),
                       style: widget.style,

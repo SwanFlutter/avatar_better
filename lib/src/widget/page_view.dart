@@ -57,8 +57,7 @@ class PageViewAvatar extends StatefulWidget {
     this.imageNetwork,
     this.listImageNetwork,
     this.namePageview,
-    this.stylePageViewTextName = const TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0),
+    this.stylePageViewTextName = const TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0),
     this.backgroundColorPageViewAppBar = Colors.white,
     this.widgetLoadingPageView,
     this.backgroundColorDropdownMenuItem = Colors.white,
@@ -87,8 +86,7 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    var sortedListImageNetwork =
-        List<String>.from(widget.listImageNetwork ?? []);
+    var sortedListImageNetwork = List<String>.from(widget.listImageNetwork ?? []);
     sortedListImageNetwork.sort((a, b) => a.length.compareTo(b.length));
 
     var sortedListImage = List<String>.from(widget.listImageNetwork ?? []);
@@ -105,14 +103,11 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
           widget.namePageview != null ? widget.namePageview! : "",
           style: widget.stylePageViewTextName,
         ),
-        backgroundColor: widget.backgroundColorPageViewAppBar ??
-            Theme.of(context).primaryColorLight,
+        backgroundColor: widget.backgroundColorPageViewAppBar ?? Theme.of(context).primaryColorLight,
         actions: [
           DropdownButton(
-            dropdownColor: widget.backgroundColorDropdownMenuItem ??
-                Theme.of(context).primaryColorLight,
-            icon:
-                Icon(Icons.more_vert, color: widget.iconColorDropdownMenuItem),
+            dropdownColor: widget.backgroundColorDropdownMenuItem ?? Theme.of(context).primaryColorLight,
+            icon: Icon(Icons.more_vert, color: widget.iconColorDropdownMenuItem),
             underline: const Divider(color: Colors.transparent),
             items: [
               DropdownMenuItem<String>(
@@ -134,9 +129,7 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                         shape: const BeveledRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
-                        content: Text(isSaved
-                            ? 'Image saved successfully!'
-                            : 'Failed to save image.'),
+                        content: Text(isSaved ? 'Image saved successfully!' : 'Failed to save image.'),
                       ),
                     );
                   }
@@ -148,20 +141,16 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                       );
                       showSnackBar(context, isSaved);
                     } else if (Platform.isAndroid) {
-                      bool isSaved = await FlutterSaver.saveImageAndroid(
-                          fileImage: widget.imagePicker!);
+                      bool isSaved = await FlutterSaver.saveImageAndroid(fileImage: widget.imagePicker!);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isIOS) {
-                      bool isSaved = await FlutterSaver.saveImageIos(
-                          fileImage: widget.imagePicker!);
+                      bool isSaved = await FlutterSaver.saveImageIos(fileImage: widget.imagePicker!);
                       showSnackBar(context, isSaved);
-                    } else if (Platform.isWindows) {
-                      bool isSaved = await FlutterSaver.saveImageWindowsWeb(
-                          fileImage: widget.imagePicker!);
+                    } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+                      bool isSaved = await FlutterSaver.saveImageWindowsWeb(fileImage: widget.imagePicker!);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isMacOS) {
-                      bool isSaved = await FlutterSaver.saveImageIos(
-                          fileImage: widget.imagePicker!);
+                      bool isSaved = await FlutterSaver.saveImageIos(fileImage: widget.imagePicker!);
                       showSnackBar(context, isSaved);
                     } else {
                       debugPrint('Failed to save image. Unsupported platform.');
@@ -173,20 +162,16 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                       );
                       showSnackBar(context, isSaved);
                     } else if (Platform.isAndroid) {
-                      bool isSaved = await FlutterSaver.saveFileAndroid(
-                          link: widget.imageNetwork!);
+                      bool isSaved = await FlutterSaver.saveFileAndroid(link: widget.imageNetwork!);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isIOS) {
-                      bool isSaved = await FlutterSaver.saveFileIos(
-                          link: widget.imageNetwork!);
+                      bool isSaved = await FlutterSaver.saveFileIos(link: widget.imageNetwork!);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isWindows) {
-                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(
-                          link: widget.imageNetwork!);
+                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(link: widget.imageNetwork!);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isMacOS) {
-                      bool isSaved = await FlutterSaver.saveFileMac(
-                          link: widget.imageNetwork!);
+                      bool isSaved = await FlutterSaver.saveFileMac(link: widget.imageNetwork!);
                       showSnackBar(context, isSaved);
                     } else {
                       debugPrint('Failed to save image. Unsupported platform.');
@@ -198,20 +183,16 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                       );
                       showSnackBar(context, isSaved);
                     } else if (Platform.isAndroid) {
-                      bool isSaved = await FlutterSaver.saveFileAndroid(
-                          link: widget.listImageNetwork!.last);
+                      bool isSaved = await FlutterSaver.saveFileAndroid(link: widget.listImageNetwork!.last);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isIOS) {
-                      bool isSaved = await FlutterSaver.saveFileIos(
-                          link: widget.listImageNetwork!.last);
+                      bool isSaved = await FlutterSaver.saveFileIos(link: widget.listImageNetwork!.last);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isWindows) {
-                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(
-                          link: widget.listImageNetwork!.last);
+                      bool isSaved = await FlutterSaver.saveFileWindowsWeb(link: widget.listImageNetwork!.last);
                       showSnackBar(context, isSaved);
                     } else if (Platform.isMacOS) {
-                      bool isSaved = await FlutterSaver.saveFileMac(
-                          link: widget.listImageNetwork!.last);
+                      bool isSaved = await FlutterSaver.saveFileMac(link: widget.listImageNetwork!.last);
                       showSnackBar(context, isSaved);
                     } else {
                       debugPrint('Failed to save image. Unsupported platform.');
@@ -227,10 +208,7 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
           ),
         ],
       ),
-      body: widget.imagePicker == null &&
-              widget.image == null &&
-              widget.imageNetwork == null &&
-              widget.listImageNetwork != null
+      body: widget.imagePicker == null && widget.image == null && widget.imageNetwork == null && widget.listImageNetwork != null
           ? widget.listImageNetwork != null
               ? Zoom.zoomOnTap(
                   zoomedScale: 3.0,
@@ -261,8 +239,7 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                   ),
                 )
               : Center(
-                  child: widget.widgetLoadingPageView ??
-                      const CircularProgressIndicator(),
+                  child: widget.widgetLoadingPageView ?? const CircularProgressIndicator(),
                 )
           : Zoom.zoomOnTap(
               zoomedScale: 3.0,

@@ -1,8 +1,11 @@
-This is a complete avatar package that you can use for your profile and avatar
+This is a complete avatar package that you can use for your profile and avatar.
+
+If you want to have the same avatar without crop, use this package :
 
 ## Features
 
 **Features:**  
+
 ✔️ Initial Text: Displaying initial text for avatars or placeholders.  
 ✔️ Random Colors: Generating random colors for various elements.  
 ✔️ Random Linear Gradient: Generating random linear gradient colors.
@@ -11,6 +14,7 @@ This is a complete avatar package that you can use for your profile and avatar
 ✔️ gradient Width Border: Create a gradient color for the borders .
 ✔️ Use ImageAssets .
 ✔️ Use ImageNetwork .
+✔️ All Platfoem cropper .
 
 ![Capture1](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/9cb4f63a-5b2d-4d58-b820-de9b080ddaaf) ![Capture2](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/21aebfdd-a39a-46e7-bf2b-7b7c2e990891)
 
@@ -25,7 +29,7 @@ This is a complete avatar package that you can use for your profile and avatar
 
 ```yaml
 dependencies:
-  avatar_better: ^0.0.8
+  avatar_better: ^0.0.9
 ```
 
 ## How to use

@@ -2,14 +2,15 @@
 
 import 'dart:io';
 
+import 'package:avatar_better/multiPlatform/multi_platform_profile.dart';
 import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
 import 'package:avatar_better/src/tools/options_crop.dart';
 import 'package:avatar_better/src/widget/isborder_avatar.dart';
 import 'package:avatar_better/src/widget/none_border_avatar.dart';
-import 'package:avatar_better/web/isweb_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_cropping/image_cropping.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../tools/extensions/image_tools.dart';
@@ -118,23 +119,20 @@ class Profile extends StatefulWidget {
     this.isBorderAvatar = false,
     this.backgroundColor = Colors.green,
     this.bottomSheetStyles,
-    this.gradientWidthBorder =
-        const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
+    this.gradientWidthBorder = const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
     this.iconColor = Colors.black,
     this.widthBorder = 5.0,
     this.backgroundColorCamera = Colors.white,
     this.icon = Icons.camera,
     this.optionsCrop,
-    this.style = const TextStyle(
-        fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+    this.style = const TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
     bool randomGradient = false,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
-      gradientBackgroundColor =
-          GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor = GradientRandomTools.getGradient(text.toString());
     } else {
       backgroundColor = backgroundColor;
     }
@@ -146,7 +144,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File? image;
-  Uint8List? imageBytesWeb;
+  Uint8List? multiPlatformByte;
   ImageTools imageModel = ImageTools();
 
   @override
@@ -154,21 +152,19 @@ class _ProfileState extends State<Profile> {
     return InkResponse(
       child: Stack(
         children: [
-          if (kIsWeb)
-            IsWebProfile(
+          if (kIsWeb || Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+            MultiPlatform(
               widget: widget,
-              imageBytesWeb: imageBytesWeb,
+              imageBytesWeb: multiPlatformByte,
             )
           else
-            widget.isBorderAvatar
-                ? IsBorderAvatar(widget: widget, image: image)
-                : NoneBorderAvatar(widget: widget, image: image),
+            widget.isBorderAvatar ? IsBorderAvatar(widget: widget, image: image) : NoneBorderAvatar(widget: widget, image: image),
           Positioned(
             bottom: widget.radius != null ? widget.radius! / 11 : 0,
             right: widget.radius != null ? widget.radius! / 11 : 0,
             child: InkResponse(
               onTap: () {
-                customBottomPickerImage();
+                customBottomPickerImage(context);
                 // Navigator.pop(context);
               },
               child: CircleAvatar(
@@ -187,7 +183,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void customBottomPickerImage() {
+  void customBottomPickerImage(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: widget.bottomSheetStyles?.backgroundColor,
       elevation: widget.bottomSheetStyles?.elevation,
@@ -203,24 +199,17 @@ class _ProfileState extends State<Profile> {
             children: [
               InkWell(
                 onTap: () async {
-                  final List<XFile> file =
-                      await imageModel.pickImage(ImageSource.gallery, false);
-
+                  final List<XFile> file = await imageModel.pickImage(ImageSource.gallery, false);
+                  final bytes = await file.first.readAsBytes();
                   if (file.isNotEmpty && file.first != null) {
                     // Cropping for mobile platforms (Android and iOS)
                     if (Platform.isAndroid || Platform.isIOS) {
                       final croppedFile = await imageModel.crop(
                         file.first,
-                        cropStyle:
-                            widget.optionsCrop?.cropStyle ?? CropStyle.circle,
-                        toolbarColor: widget.optionsCrop?.toolbarColorCrop ??
-                            Colors.deepOrange,
-                        toolbarWidgetColor:
-                            widget.optionsCrop?.toolbarWidgetColorCrop ??
-                                Colors.white,
-                        initAspectRatio:
-                            widget.optionsCrop?.initAspectRatioCrop ??
-                                CropAspectRatioPreset.original,
+                        cropStyle: widget.optionsCrop?.cropStyle ?? CropStyle.circle,
+                        toolbarColor: widget.optionsCrop?.toolbarColorCrop ?? Colors.deepOrange,
+                        toolbarWidgetColor: widget.optionsCrop?.toolbarWidgetColorCrop ?? Colors.white,
+                        initAspectRatio: widget.optionsCrop?.initAspectRatioCrop ?? CropAspectRatioPreset.original,
                       );
 
                       if (croppedFile != null) {
@@ -235,24 +224,41 @@ class _ProfileState extends State<Profile> {
                     else if (kIsWeb) {
                       final croppedImageBytes = await imageModel.cropForWeb(
                         file.first,
-                        presentStyle: widget.optionsCrop?.webPresentStyle ??
-                            WebPresentStyle.dialog,
+                        presentStyle: widget.optionsCrop?.webPresentStyle ?? WebPresentStyle.dialog,
                         buildContext: context,
                       );
 
                       if (croppedImageBytes != null) {
                         setState(() {
-                          imageBytesWeb = croppedImageBytes;
-                          widget.onPickerChangeWeb?.call(imageBytesWeb!);
+                          multiPlatformByte = croppedImageBytes;
+                          widget.onPickerChangeWeb?.call(multiPlatformByte!);
+                          Navigator.pop(context);
                         });
                       }
                     }
                     // For Windows, Mac, and Linux without cropping
-                    else if (Platform.isWindows || Platform.isMacOS) {
+                    else if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+                      final croppedBytes = await ImageCropping.cropImage(
+                        context: context,
+                        imageBytes: bytes,
+                        onImageDoneListener: (croppedData) async {
+                          return croppedData;
+                        },
+                        visibleOtherAspectRatios: true,
+                        squareBorderWidth: 2,
+                        squareCircleColor: Colors.black,
+                        defaultTextColor: Colors.orange,
+                        selectedTextColor: Colors.black,
+                        colorForWhiteSpace: Colors.grey,
+                        encodingQuality: 80,
+                        outputImageFormat: OutputImageFormat.jpg,
+                      );
                       setState(() {
-                        image = File(file.first.path);
-                        widget.onPickerChange?.call(image!);
-                        Navigator.pop(context);
+                        if (croppedBytes != null) {
+                          multiPlatformByte = croppedBytes;
+                          widget.onPickerChangeWeb?.call(multiPlatformByte!);
+                          Navigator.pop(context);
+                        }
                       });
                     }
                   } else {
@@ -270,12 +276,9 @@ class _ProfileState extends State<Profile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (widget.bottomSheetStyles?.galleryButton?.icon !=
-                            null)
-                          widget.bottomSheetStyles!.galleryButton!.icon!,
+                        if (widget.bottomSheetStyles?.galleryButton?.icon != null) widget.bottomSheetStyles!.galleryButton!.icon!,
                         Text(
-                          widget.bottomSheetStyles?.galleryButton?.text ??
-                              "Browse Gallery",
+                          widget.bottomSheetStyles?.galleryButton?.text ?? "Browse Gallery",
                           style: widget.bottomSheetStyles?.galleryButton?.style,
                         ),
                       ],
@@ -297,23 +300,16 @@ class _ProfileState extends State<Profile> {
               if (Platform.isAndroid || Platform.isIOS)
                 InkWell(
                   onTap: () async {
-                    final List<XFile> file =
-                        await imageModel.pickImage(ImageSource.camera, false);
+                    final List<XFile> file = await imageModel.pickImage(ImageSource.camera, false);
 
                     if (file.isNotEmpty && file.first != null) {
                       if (Platform.isAndroid || Platform.isIOS) {
                         final croppedFile = await imageModel.crop(
                           file.first,
-                          cropStyle:
-                              widget.optionsCrop?.cropStyle ?? CropStyle.circle,
-                          toolbarColor: widget.optionsCrop?.toolbarColorCrop ??
-                              Colors.deepOrange,
-                          toolbarWidgetColor:
-                              widget.optionsCrop?.toolbarWidgetColorCrop ??
-                                  Colors.white,
-                          initAspectRatio:
-                              widget.optionsCrop?.initAspectRatioCrop ??
-                                  CropAspectRatioPreset.original,
+                          cropStyle: widget.optionsCrop?.cropStyle ?? CropStyle.circle,
+                          toolbarColor: widget.optionsCrop?.toolbarColorCrop ?? Colors.deepOrange,
+                          toolbarWidgetColor: widget.optionsCrop?.toolbarWidgetColorCrop ?? Colors.white,
+                          initAspectRatio: widget.optionsCrop?.initAspectRatioCrop ?? CropAspectRatioPreset.original,
                         );
 
                         if (croppedFile != null) {
@@ -326,15 +322,14 @@ class _ProfileState extends State<Profile> {
                       } else if (kIsWeb) {
                         final croppedImageBytes = await imageModel.cropForWeb(
                           file.first,
-                          presentStyle: widget.optionsCrop?.webPresentStyle ??
-                              WebPresentStyle.dialog,
+                          presentStyle: widget.optionsCrop?.webPresentStyle ?? WebPresentStyle.dialog,
                           buildContext: context,
                         );
 
                         if (croppedImageBytes != null) {
                           setState(() {
-                            imageBytesWeb = croppedImageBytes;
-                            widget.onPickerChangeWeb?.call(imageBytesWeb!);
+                            multiPlatformByte = croppedImageBytes;
+                            widget.onPickerChangeWeb?.call(multiPlatformByte!);
                           });
                         }
                       }
@@ -353,14 +348,10 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (widget.bottomSheetStyles?.cameraButton?.icon !=
-                              null)
-                            widget.bottomSheetStyles!.cameraButton!.icon!,
+                          if (widget.bottomSheetStyles?.cameraButton?.icon != null) widget.bottomSheetStyles!.cameraButton!.icon!,
                           Text(
-                            widget.bottomSheetStyles?.cameraButton?.text ??
-                                "Use Camera",
-                            style:
-                                widget.bottomSheetStyles?.cameraButton?.style,
+                            widget.bottomSheetStyles?.cameraButton?.text ?? "Use Camera",
+                            style: widget.bottomSheetStyles?.cameraButton?.style,
                           ),
                         ],
                       ),
