@@ -24,3 +24,7 @@
 ## 0.0.9+1
 
 * Adit README.md.
+
+## 0.0.9+2
+
+* Add new feature.

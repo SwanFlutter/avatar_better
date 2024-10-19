@@ -26,14 +26,26 @@ class ImageTools {
     }
   }
 
-  Future<CroppedFile?> crop(XFile file,
-      {CropStyle? cropStyle,
-      Color? toolbarColor,
-      Color? toolbarWidgetColor,
-      CropAspectRatioPresetData? initAspectRatio}) async {
+  Future<CroppedFile?> crop(
+    XFile file, {
+    CropStyle? cropStyle,
+    Color? toolbarColor,
+    Color? toolbarWidgetColor,
+    CropAspectRatioPresetData? initAspectRatio,
+    CropAspectRatio? aspectRatio,
+    required ImageCompressFormat compressFormat,
+    int? compressQuality,
+    int? maxHeight,
+    int? maxWidth,
+  }) async {
     try {
       return await _imageCropper.cropImage(
         sourcePath: file.path,
+        aspectRatio: aspectRatio,
+        compressFormat: compressFormat,
+        compressQuality: compressQuality!,
+        maxHeight: maxHeight,
+        maxWidth: maxWidth,
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Cropper',
@@ -64,9 +76,7 @@ class ImageTools {
     }
   }
 
-  Future<Uint8List?> cropForWeb(XFile file,
-      {WebPresentStyle? presentStyle,
-      required BuildContext buildContext}) async {
+  Future<Uint8List?> cropForWeb(XFile file, {WebPresentStyle? presentStyle, required BuildContext buildContext}) async {
     try {
       if (kIsWeb) {
         // For web platform

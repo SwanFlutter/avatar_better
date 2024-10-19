@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:avatar_better/multiPlatform/multi_platform_profile.dart';
 import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
 import 'package:avatar_better/src/tools/options_crop.dart';
+import 'package:avatar_better/src/tools/options_crop_wind_mac_linux.dart';
 import 'package:avatar_better/src/widget/isborder_avatar.dart';
 import 'package:avatar_better/src/widget/none_border_avatar.dart';
 import 'package:flutter/foundation.dart';
@@ -105,6 +106,8 @@ class Profile extends StatefulWidget {
   /// [BottomSheetStyles] : Configuration for customizing the bottom sheet's appearance and behavior.
   final BottomSheetStyles? bottomSheetStyles;
 
+  final OptionsCropWindMacLinux? optionsCropWindMacLinux;
+
   Profile({
     super.key,
     required this.radius,
@@ -119,23 +122,21 @@ class Profile extends StatefulWidget {
     this.isBorderAvatar = false,
     this.backgroundColor = Colors.green,
     this.bottomSheetStyles,
-    this.gradientWidthBorder =
-        const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
+    this.gradientWidthBorder = const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
     this.iconColor = Colors.black,
     this.widthBorder = 5.0,
     this.backgroundColorCamera = Colors.white,
     this.icon = Icons.camera,
     this.optionsCrop,
-    this.style = const TextStyle(
-        fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+    this.optionsCropWindMacLinux,
+    this.style = const TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
     bool randomGradient = false,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
-      gradientBackgroundColor =
-          GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor = GradientRandomTools.getGradient(text.toString());
     } else {
       backgroundColor = backgroundColor;
     }
@@ -155,18 +156,13 @@ class _ProfileState extends State<Profile> {
     return InkResponse(
       child: Stack(
         children: [
-          if (kIsWeb ||
-              Platform.isWindows ||
-              Platform.isLinux ||
-              Platform.isMacOS)
+          if (kIsWeb || Platform.isWindows || Platform.isLinux || Platform.isMacOS)
             MultiPlatform(
               widget: widget,
               imageBytesWeb: multiPlatformByte,
             )
           else
-            widget.isBorderAvatar
-                ? IsBorderAvatar(widget: widget, image: image)
-                : NoneBorderAvatar(widget: widget, image: image),
+            widget.isBorderAvatar ? IsBorderAvatar(widget: widget, image: image) : NoneBorderAvatar(widget: widget, image: image),
           Positioned(
             bottom: widget.radius != null ? widget.radius! / 11 : 0,
             right: widget.radius != null ? widget.radius! / 11 : 0,
@@ -207,24 +203,22 @@ class _ProfileState extends State<Profile> {
             children: [
               InkWell(
                 onTap: () async {
-                  final List<XFile> file =
-                      await imageModel.pickImage(ImageSource.gallery, false);
+                  final List<XFile> file = await imageModel.pickImage(ImageSource.gallery, false);
                   final bytes = await file.first.readAsBytes();
                   if (file.isNotEmpty && file.first != null) {
                     // Cropping for mobile platforms (Android and iOS)
                     if (Platform.isAndroid || Platform.isIOS) {
                       final croppedFile = await imageModel.crop(
                         file.first,
-                        cropStyle:
-                            widget.optionsCrop?.cropStyle ?? CropStyle.circle,
-                        toolbarColor: widget.optionsCrop?.toolbarColorCrop ??
-                            Colors.deepOrange,
-                        toolbarWidgetColor:
-                            widget.optionsCrop?.toolbarWidgetColorCrop ??
-                                Colors.white,
-                        initAspectRatio:
-                            widget.optionsCrop?.initAspectRatioCrop ??
-                                CropAspectRatioPreset.original,
+                        aspectRatio: widget.optionsCrop?.aspectRatio,
+                        compressFormat: widget.optionsCrop?.compressFormat ?? ImageCompressFormat.jpg,
+                        compressQuality: widget.optionsCrop?.compressQuality ?? 90,
+                        maxHeight: widget.optionsCrop?.maxHeight,
+                        maxWidth: widget.optionsCrop?.maxWidth,
+                        cropStyle: widget.optionsCrop?.cropStyle ?? CropStyle.circle,
+                        toolbarColor: widget.optionsCrop?.toolbarColorCrop ?? Colors.deepOrange,
+                        toolbarWidgetColor: widget.optionsCrop?.toolbarWidgetColorCrop ?? Colors.white,
+                        initAspectRatio: widget.optionsCrop?.initAspectRatioCrop ?? CropAspectRatioPreset.original,
                       );
 
                       if (croppedFile != null) {
@@ -239,8 +233,7 @@ class _ProfileState extends State<Profile> {
                     else if (kIsWeb) {
                       final croppedImageBytes = await imageModel.cropForWeb(
                         file.first,
-                        presentStyle: widget.optionsCrop?.webPresentStyle ??
-                            WebPresentStyle.dialog,
+                        presentStyle: widget.optionsCrop?.webPresentStyle ?? WebPresentStyle.dialog,
                         buildContext: context,
                       );
 
@@ -253,23 +246,32 @@ class _ProfileState extends State<Profile> {
                       }
                     }
                     // For Windows, Mac, and Linux without cropping
-                    else if (Platform.isWindows ||
-                        Platform.isMacOS ||
-                        Platform.isLinux) {
+                    else if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
                       final croppedBytes = await ImageCropping.cropImage(
                         context: context,
                         imageBytes: bytes,
+                        selectedImageRatio: widget.optionsCropWindMacLinux?.selectedImageRatio,
+                        outputImageFormat: widget.optionsCropWindMacLinux!.outputImageFormat,
+                        customAspectRatios: widget.optionsCropWindMacLinux?.customAspectRatios,
+                        imageEdgeInsets: widget.optionsCropWindMacLinux?.imageEdgeInsets,
+                        isConstrain: widget.optionsCropWindMacLinux!.isConstrain,
+                        key: widget.optionsCropWindMacLinux?.key,
+                        makeDarkerOutside: widget.optionsCropWindMacLinux!.makeDarkerOutside,
+                        onImageEndLoading: widget.optionsCropWindMacLinux?.onImageEndLoading,
+                        onImageStartLoading: widget.optionsCropWindMacLinux?.onImageStartLoading,
+                        rootNavigator: widget.optionsCropWindMacLinux!.rootNavigator,
+                        squareCircleSize: widget.optionsCropWindMacLinux!.squareCircleSize,
+                        workerPath: widget.optionsCropWindMacLinux?.workerPath,
                         onImageDoneListener: (croppedData) async {
                           return croppedData;
                         },
-                        visibleOtherAspectRatios: true,
-                        squareBorderWidth: 2,
-                        squareCircleColor: Colors.black,
-                        defaultTextColor: Colors.orange,
-                        selectedTextColor: Colors.black,
-                        colorForWhiteSpace: Colors.grey,
-                        encodingQuality: 80,
-                        outputImageFormat: OutputImageFormat.jpg,
+                        visibleOtherAspectRatios: widget.optionsCropWindMacLinux?.visibleOtherAspectRatios ?? true,
+                        squareBorderWidth: widget.optionsCropWindMacLinux?.squareBorderWidth ?? 2,
+                        squareCircleColor: widget.optionsCropWindMacLinux?.squareCircleColor ?? Colors.black,
+                        defaultTextColor: widget.optionsCropWindMacLinux?.defaultTextColor ?? Colors.orange,
+                        selectedTextColor: widget.optionsCropWindMacLinux?.selectedTextColor ?? Colors.black,
+                        colorForWhiteSpace: widget.optionsCropWindMacLinux?.colorForWhiteSpace ?? Colors.grey,
+                        encodingQuality: widget.optionsCropWindMacLinux?.encodingQuality ?? 80,
                       );
                       setState(() {
                         if (croppedBytes != null) {
@@ -294,12 +296,9 @@ class _ProfileState extends State<Profile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (widget.bottomSheetStyles?.galleryButton?.icon !=
-                            null)
-                          widget.bottomSheetStyles!.galleryButton!.icon!,
+                        if (widget.bottomSheetStyles?.galleryButton?.icon != null) widget.bottomSheetStyles!.galleryButton!.icon!,
                         Text(
-                          widget.bottomSheetStyles?.galleryButton?.text ??
-                              "Browse Gallery",
+                          widget.bottomSheetStyles?.galleryButton?.text ?? "Browse Gallery",
                           style: widget.bottomSheetStyles?.galleryButton?.style,
                         ),
                       ],
@@ -321,23 +320,21 @@ class _ProfileState extends State<Profile> {
               if (Platform.isAndroid || Platform.isIOS)
                 InkWell(
                   onTap: () async {
-                    final List<XFile> file =
-                        await imageModel.pickImage(ImageSource.camera, false);
+                    final List<XFile> file = await imageModel.pickImage(ImageSource.camera, false);
 
                     if (file.isNotEmpty && file.first != null) {
                       if (Platform.isAndroid || Platform.isIOS) {
                         final croppedFile = await imageModel.crop(
                           file.first,
-                          cropStyle:
-                              widget.optionsCrop?.cropStyle ?? CropStyle.circle,
-                          toolbarColor: widget.optionsCrop?.toolbarColorCrop ??
-                              Colors.deepOrange,
-                          toolbarWidgetColor:
-                              widget.optionsCrop?.toolbarWidgetColorCrop ??
-                                  Colors.white,
-                          initAspectRatio:
-                              widget.optionsCrop?.initAspectRatioCrop ??
-                                  CropAspectRatioPreset.original,
+                          aspectRatio: widget.optionsCrop?.aspectRatio,
+                          compressFormat: widget.optionsCrop?.compressFormat ?? ImageCompressFormat.jpg,
+                          compressQuality: widget.optionsCrop?.compressQuality ?? 90,
+                          maxHeight: widget.optionsCrop?.maxHeight,
+                          maxWidth: widget.optionsCrop?.maxWidth,
+                          cropStyle: widget.optionsCrop?.cropStyle ?? CropStyle.circle,
+                          toolbarColor: widget.optionsCrop?.toolbarColorCrop ?? Colors.deepOrange,
+                          toolbarWidgetColor: widget.optionsCrop?.toolbarWidgetColorCrop ?? Colors.white,
+                          initAspectRatio: widget.optionsCrop?.initAspectRatioCrop ?? CropAspectRatioPreset.original,
                         );
 
                         if (croppedFile != null) {
@@ -350,8 +347,7 @@ class _ProfileState extends State<Profile> {
                       } else if (kIsWeb) {
                         final croppedImageBytes = await imageModel.cropForWeb(
                           file.first,
-                          presentStyle: widget.optionsCrop?.webPresentStyle ??
-                              WebPresentStyle.dialog,
+                          presentStyle: widget.optionsCrop?.webPresentStyle ?? WebPresentStyle.dialog,
                           buildContext: context,
                         );
 
@@ -377,14 +373,10 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (widget.bottomSheetStyles?.cameraButton?.icon !=
-                              null)
-                            widget.bottomSheetStyles!.cameraButton!.icon!,
+                          if (widget.bottomSheetStyles?.cameraButton?.icon != null) widget.bottomSheetStyles!.cameraButton!.icon!,
                           Text(
-                            widget.bottomSheetStyles?.cameraButton?.text ??
-                                "Use Camera",
-                            style:
-                                widget.bottomSheetStyles?.cameraButton?.style,
+                            widget.bottomSheetStyles?.cameraButton?.text ?? "Use Camera",
+                            style: widget.bottomSheetStyles?.cameraButton?.style,
                           ),
                         ],
                       ),

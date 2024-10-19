@@ -25,14 +25,38 @@ class OptionsCrop {
   /// Choose from a set of aspect ratio presets.
   ///
   /// Default = [CropAspectRatioPreset.original].
-  CropAspectRatioPresetData initAspectRatioCrop =
-      CropAspectRatioPreset.original;
+  CropAspectRatioPresetData initAspectRatioCrop = CropAspectRatioPreset.original;
 
   /// The presentation style of the cropper on the web.
   /// It can either be displayed as a dialog or a page (route).
   ///
   /// Default = [WebPresentStyle.dialog].
   WebPresentStyle webPresentStyle = WebPresentStyle.dialog;
+
+  /// [aspectRatio] The aspect ratio to be applied when cropping.
+  ///
+  /// Default = null.
+  CropAspectRatio? aspectRatio;
+
+  /// [compressFormat] The format of the compressed image.
+  ///
+  /// Default = [ImageCompressFormat.png].
+  ImageCompressFormat compressFormat = ImageCompressFormat.png;
+
+  /// [compressQuality] The quality of the compressed image.
+  ///
+  /// Default = 90.
+  int? compressQuality = 90;
+
+  /// [maxHeight] The maximum height of the cropped image.
+  ///
+  /// Default = null.
+  int? maxHeight;
+
+  /// [maxWidth] The maximum width of the cropped image.
+  ///
+  /// Default = null.
+  int? maxWidth;
 
   /// Constructor for [OptionsCrop] to initialize cropping configurations.
   ///
@@ -41,11 +65,21 @@ class OptionsCrop {
   /// - [toolbarWidgetColorCrop] : The color for the widgets in the toolbar, default is [Colors.white].
   /// - [initAspectRatioCrop] : The aspect ratio preset, default is [CropAspectRatioPreset.original].
   /// - [webPresentStyle] : The web presentation style, default is [WebPresentStyle.dialog].
+  /// - [aspectRatio] : The aspect ratio to be applied when cropping, default is null.
+  /// - [compressFormat] : The format of the compressed image, default is [ImageCompressFormat.png].
+  /// - [compressQuality] : The quality of the compressed image, default is 90.
+  /// - [maxHeight] : The maximum height of the cropped image, default is null.
+  /// - [maxWidth] : The maximum width of the cropped image, default is null.
   OptionsCrop({
     this.cropStyle,
     required this.toolbarColorCrop,
     required this.toolbarWidgetColorCrop,
     required this.initAspectRatioCrop,
     required this.webPresentStyle,
+    this.aspectRatio,
+    this.compressFormat = ImageCompressFormat.png,
+    this.compressQuality = 90,
+    this.maxHeight,
+    this.maxWidth,
   });
 }
