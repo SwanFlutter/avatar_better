@@ -119,7 +119,8 @@ class Avatar extends StatefulWidget {
   final ProfileImageViewerOptions? profileImageViewerOptions;
 
   /// [itemsBuilderDropdownMenuItem]: The builder function for the dropdown menu items in page view.
-  final List<DropdownMenuItem<String>>? Function(int index)? itemsBuilderDropdownMenuItem;
+  final List<DropdownMenuItem<String>>? Function(int index)?
+      itemsBuilderDropdownMenuItem;
 
   Avatar({
     super.key,
@@ -133,20 +134,23 @@ class Avatar extends StatefulWidget {
     this.backgroundColor,
     this.gradientBackgroundColor,
     this.shadowColor = Colors.black,
-    this.gradientWidthBorder = const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
+    this.gradientWidthBorder =
+        const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
     this.elevation = 0,
     this.widthBorder = 5.0,
     this.isBorderAvatar = false,
     this.showPageViewOnTap = false,
     this.itemsBuilderDropdownMenuItem = defaultItemsBuilder,
-    this.style = const TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+    this.style = const TextStyle(
+        fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
     bool randomGradient = false,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
-      gradientBackgroundColor = GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor =
+          GradientRandomTools.getGradient(text.toString());
     } else {
       backgroundColor = backgroundColor;
     }
@@ -175,10 +179,12 @@ class Avatar extends StatefulWidget {
     Gradient? gradientBackgroundColor,
 
     /// [gradientWidthBorder]: The gradient for the profile's border (default: linear gradient from blue to deep purple).
-    Gradient? gradientWidthBorder = const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
+    Gradient? gradientWidthBorder =
+        const LinearGradient(colors: [Colors.blue, Colors.deepPurple]),
 
     /// [style]: The text style (default: font size 25, white color, and bold).
-    final TextStyle? style = const TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+    final TextStyle? style = const TextStyle(
+        fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
 
     /// [backgroundColorCamera] : color background picker
     final Color backgroundColorCamera = Colors.white,
@@ -228,7 +234,8 @@ class Avatar extends StatefulWidget {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text!);
     } else if (randomGradient) {
-      gradientBackgroundColor = GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor =
+          GradientRandomTools.getGradient(text.toString());
     } else {
       backgroundColor = backgroundColor;
     }
@@ -286,12 +293,20 @@ class _AvatarState extends State<Avatar> {
                     imagePicker: imagePicker,
                     listImageNetwork: widget.listImageNetwork,
                     namePageview: widget.text!.toLowerCase(),
-                    backBottomColor: widget.profileImageViewerOptions?.backBottomColorPageView,
-                    backgroundColorDropdownMenuItem: widget.profileImageViewerOptions?.backgroundColorDropdownMenuItem,
-                    iconColorDropdownMenuItem: widget.profileImageViewerOptions?.iconColorDropdownMenuItem,
-                    backgroundColorPageViewAppBar: widget.profileImageViewerOptions?.backgroundColorPageViewAppBar,
-                    widgetLoadingPageView: widget.profileImageViewerOptions?.widgetLoadingPageView,
-                    fitBackgroundImage: widget.profileImageViewerOptions?.fitBackgroundImage,
+                    backBottomColor: widget
+                        .profileImageViewerOptions?.backBottomColorPageView,
+                    backgroundColorDropdownMenuItem: widget
+                        .profileImageViewerOptions
+                        ?.backgroundColorDropdownMenuItem,
+                    iconColorDropdownMenuItem: widget
+                        .profileImageViewerOptions?.iconColorDropdownMenuItem,
+                    backgroundColorPageViewAppBar: widget
+                        .profileImageViewerOptions
+                        ?.backgroundColorPageViewAppBar,
+                    widgetLoadingPageView:
+                        widget.profileImageViewerOptions?.widgetLoadingPageView,
+                    fitBackgroundImage:
+                        widget.profileImageViewerOptions?.fitBackgroundImage,
                     widget: widget,
                   ),
                 ),
@@ -324,9 +339,13 @@ class _AvatarState extends State<Avatar> {
                             image: FileImage(imagePicker),
                             fit: BoxFit.cover,
                           )
-                        : widget.imageNetwork != null || widget.listImageNetwork != null
+                        : widget.imageNetwork != null ||
+                                widget.listImageNetwork != null
                             ? DecorationImage(
-                                image: Image.network(widget.imageNetwork != null ? widget.imageNetwork! : widget.listImageNetwork!.last).image,
+                                image: Image.network(widget.imageNetwork != null
+                                        ? widget.imageNetwork!
+                                        : widget.listImageNetwork!.last)
+                                    .image,
                                 fit: BoxFit.cover,
                               )
                             : widget.image != null
@@ -337,7 +356,11 @@ class _AvatarState extends State<Avatar> {
                                 : null,
                   ),
                   // ignore: unnecessary_null_comparison
-                  child: (imagePicker == null && widget.imageNetwork == null && widget.image == null && widget.listImageNetwork == null && widget.text != null)
+                  child: (imagePicker == null &&
+                          widget.imageNetwork == null &&
+                          widget.image == null &&
+                          widget.listImageNetwork == null &&
+                          widget.text != null)
                       ? Text(
                           AvatarCircleExtensions.initials(widget.text!),
                           style: widget.style,
@@ -366,9 +389,13 @@ class _AvatarState extends State<Avatar> {
                           image: FileImage(imagePicker),
                           fit: BoxFit.cover,
                         )
-                      : widget.imageNetwork != null || widget.listImageNetwork != null
+                      : widget.imageNetwork != null ||
+                              widget.listImageNetwork != null
                           ? DecorationImage(
-                              image: Image.network(widget.imageNetwork != null ? widget.imageNetwork! : widget.listImageNetwork!.last).image,
+                              image: Image.network(widget.imageNetwork != null
+                                      ? widget.imageNetwork!
+                                      : widget.listImageNetwork!.last)
+                                  .image,
                               fit: BoxFit.cover,
                             )
                           : widget.image != null
@@ -379,7 +406,11 @@ class _AvatarState extends State<Avatar> {
                               : null,
                 ),
                 // ignore: unnecessary_null_comparison
-                child: (imagePicker == null && widget.imageNetwork == null && widget.image == null && widget.listImageNetwork == null && widget.text != null)
+                child: (imagePicker == null &&
+                        widget.imageNetwork == null &&
+                        widget.image == null &&
+                        widget.listImageNetwork == null &&
+                        widget.text != null)
                     ? Text(
                         AvatarCircleExtensions.initials(widget.text!),
                         style: widget.style,

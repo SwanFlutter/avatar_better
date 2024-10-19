@@ -55,7 +55,10 @@ class IsBorderAvatar extends StatelessWidget {
                           )
                         : null,
           ),
-          child: (image == null && widget.imageNetwork == null && widget.image == null && widget.text != null)
+          child: (image == null &&
+                  widget.imageNetwork == null &&
+                  widget.image == null &&
+                  widget.text != null)
               ? Text(
                   ProfileExtensions.initials(widget.text!),
                   style: widget.style,

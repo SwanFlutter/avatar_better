@@ -25,7 +25,8 @@ class OptionsCrop {
   /// Choose from a set of aspect ratio presets.
   ///
   /// Default = [CropAspectRatioPreset.original].
-  CropAspectRatioPresetData initAspectRatioCrop = CropAspectRatioPreset.original;
+  CropAspectRatioPresetData initAspectRatioCrop =
+      CropAspectRatioPreset.original;
 
   /// The presentation style of the cropper on the web.
   /// It can either be displayed as a dialog or a page (route).

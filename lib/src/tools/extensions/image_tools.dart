@@ -76,7 +76,9 @@ class ImageTools {
     }
   }
 
-  Future<Uint8List?> cropForWeb(XFile file, {WebPresentStyle? presentStyle, required BuildContext buildContext}) async {
+  Future<Uint8List?> cropForWeb(XFile file,
+      {WebPresentStyle? presentStyle,
+      required BuildContext buildContext}) async {
     try {
       if (kIsWeb) {
         // For web platform

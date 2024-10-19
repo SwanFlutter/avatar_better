@@ -17,7 +17,8 @@ class GradientCirclePainter extends CustomPainter {
     const startAngle = -pi / 2;
     const sweepAngle = 2 * pi;
 
-    final List<Color> colors = gradientColors?.colors ?? [Colors.blue, Colors.green];
+    final List<Color> colors =
+        gradientColors?.colors ?? [Colors.blue, Colors.green];
 
     final gradient = SweepGradient(
       startAngle: startAngle,
