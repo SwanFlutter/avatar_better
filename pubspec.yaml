@@ -1,0 +1,38 @@
+name: avatar_better
+description: "This is a complete avatar package that you can use for your profile and avatar."
+version: 0.0.9+4
+homepage: https://github.com/SwanFlutter/avatar_better.git
+uses-material-design: This
+
+platforms:
+  android:
+  ios:
+  web:
+  windows:
+  macos:
+  linux:
+
+environment:
+  sdk: '>=2.19.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.2
+  image_cropper: ^8.0.2
+  image_picker: ^1.1.2
+  zoom_hover_pinch_image: ^1.0.3
+  permission_handler: ^11.3.1
+  image_cropping: ^0.0.14
+  flutter_saver: ^0.0.1+7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+
+flutter:
+
+
