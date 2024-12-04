@@ -16,11 +16,11 @@ If you want to have the same avatar without crop, use this package: [avatar_bett
 ✔️ Use ImageNetwork .
 ✔️ All Platfoem cropper .
 
-![Capture](https://github.com/user-attachments/assets/ac2d54f4-562b-4ef5-bce6-62cd196c9877)![avatar3](https://github.com/user-attachments/assets/6187c133-cd0b-4056-83ac-4c0de47a21e1)
+![Capture](https://github.com/user-attachments/assets/ac2d54f4-562b-4ef5-bce6-62cd196c9877)
 
 ![avatar2](https://github.com/user-attachments/assets/6aa52c2f-cacb-419f-b33e-1ba0da30c454)![avatar1](https://github.com/user-attachments/assets/13031a8f-1e5f-489c-98a9-720046a9ce8d)
 
-![avatar](https://github.com/user-attachments/assets/42da29bc-a1bf-433b-a78d-65032c2971aa)
+![avatar](https://github.com/user-attachments/assets/42da29bc-a1bf-433b-a78d-65032c2971aa)![avatar3](https://github.com/user-attachments/assets/6187c133-cd0b-4056-83ac-4c0de47a21e1)
 
 
 
