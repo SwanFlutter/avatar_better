@@ -48,6 +48,13 @@ import 'package:avatar_better/avatar_better.dart';
 
 - To request permissions from the user, you can use the following code: AndroidManifest.xml.
 
+. Replace line 1 with this code:
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+```
+
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />

@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
-import 'package:avatar_better/src/tools/extensions/permissions_request.dart';
+//import 'package:avatar_better/src/tools/extensions/permissions_request.dart';
 import 'package:avatar_better/src/tools/extensions/text_to_color.dart';
 import 'package:avatar_better/src/tools/gradiant_random_tools.dart';
 import 'package:avatar_better/src/tools/gradient_circle_painter.dart';
@@ -272,11 +272,15 @@ class Avatar extends StatefulWidget {
 }
 
 class _AvatarState extends State<Avatar> {
-  @override
+  /* @override
   void initState() {
-    handlePermissions();
     super.initState();
-  }
+    handlePermissions().then((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }*/
 
   @override
   Widget build(BuildContext context) {

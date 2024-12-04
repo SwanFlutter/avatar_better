@@ -213,8 +213,8 @@ class _ProfileState extends State<Profile> {
                 onTap: () async {
                   final List<XFile> file =
                       await imageModel.pickImage(ImageSource.gallery, false);
-                  final bytes = await file.first.readAsBytes();
                   if (file.isNotEmpty && file.first != null) {
+                    final bytes = await file.first.readAsBytes();
                     // Cropping for mobile platforms (Android and iOS)
                     if (Platform.isAndroid || Platform.isIOS) {
                       final croppedFile = await imageModel.crop(
@@ -273,24 +273,28 @@ class _ProfileState extends State<Profile> {
                         selectedImageRatio:
                             widget.optionsCropWindMacLinux?.selectedImageRatio,
                         outputImageFormat:
-                            widget.optionsCropWindMacLinux!.outputImageFormat,
+                            widget.optionsCropWindMacLinux?.outputImageFormat ??
+                                OutputImageFormat.jpg,
                         customAspectRatios:
                             widget.optionsCropWindMacLinux?.customAspectRatios,
                         imageEdgeInsets:
                             widget.optionsCropWindMacLinux?.imageEdgeInsets,
                         isConstrain:
-                            widget.optionsCropWindMacLinux!.isConstrain,
+                            widget.optionsCropWindMacLinux?.isConstrain ?? true,
                         key: widget.optionsCropWindMacLinux?.key,
                         makeDarkerOutside:
-                            widget.optionsCropWindMacLinux!.makeDarkerOutside,
+                            widget.optionsCropWindMacLinux?.makeDarkerOutside ??
+                                true,
                         onImageEndLoading:
                             widget.optionsCropWindMacLinux?.onImageEndLoading,
                         onImageStartLoading:
                             widget.optionsCropWindMacLinux?.onImageStartLoading,
                         rootNavigator:
-                            widget.optionsCropWindMacLinux!.rootNavigator,
+                            widget.optionsCropWindMacLinux?.rootNavigator ??
+                                true,
                         squareCircleSize:
-                            widget.optionsCropWindMacLinux!.squareCircleSize,
+                            widget.optionsCropWindMacLinux?.squareCircleSize ??
+                                100,
                         workerPath: widget.optionsCropWindMacLinux?.workerPath,
                         onImageDoneListener: (croppedData) async {
                           return croppedData;
@@ -317,13 +321,13 @@ class _ProfileState extends State<Profile> {
                             widget.optionsCropWindMacLinux?.encodingQuality ??
                                 80,
                       );
-                      setState(() {
-                        if (croppedBytes != null) {
+                      if (croppedBytes != null) {
+                        setState(() {
                           multiPlatformByte = croppedBytes;
                           widget.onPickerChangeWeb?.call(multiPlatformByte!);
                           Navigator.pop(context);
-                        }
-                      });
+                        });
+                      }
                     }
                   } else {
                     debugPrint('Error: No file selected or file is null.');
