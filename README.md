@@ -16,14 +16,12 @@ If you want to have the same avatar without crop, use this package: [avatar_bett
 ✔️ Use ImageNetwork .
 ✔️ All Platfoem cropper .
 
-![Capture1](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/9cb4f63a-5b2d-4d58-b820-de9b080ddaaf) ![Capture2](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/21aebfdd-a39a-46e7-bf2b-7b7c2e990891)
+![Capture](https://github.com/user-attachments/assets/ac2d54f4-562b-4ef5-bce6-62cd196c9877)![avatar3](https://github.com/user-attachments/assets/6187c133-cd0b-4056-83ac-4c0de47a21e1)
 
-![Capture3](https://github.com/SwanFlutter/flutter_avatars/assets/151648897/8990ce91-bebe-461b-9aff-291a3a1a0a90)
+![avatar2](https://github.com/user-attachments/assets/6aa52c2f-cacb-419f-b33e-1ba0da30c454)![avatar1](https://github.com/user-attachments/assets/13031a8f-1e5f-489c-98a9-720046a9ce8d)
 
-![CaptureWeb](https://github.com/SwanFlutter/avatar_better/assets/151648897/25948b33-eaeb-4aa8-bc25-d8361a604dca)
-![CaptureAvatar](https://github.com/SwanFlutter/avatar_better/assets/151648897/abff37b2-fc3b-448d-9563-cc11126c4cd5)
+![avatar](https://github.com/user-attachments/assets/42da29bc-a1bf-433b-a78d-65032c2971aa)
 
-![Capture](https://github.com/user-attachments/assets/38d6a92f-1a79-4bee-b062-2404a33f638e)
 
 
 
