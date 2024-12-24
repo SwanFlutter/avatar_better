@@ -89,6 +89,7 @@ class _AvatarExampleState extends State<AvatarExample> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Avatar.profile(
+                          backgroundColorCamera: Colors.amber,
                           imageNetwork: "https://i.pravatar.cc/300",
                           // onTapAvatar: () {},
                           radius: 35,

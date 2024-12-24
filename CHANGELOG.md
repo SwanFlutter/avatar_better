@@ -40,6 +40,12 @@
 * Edit README
 * Fix permisstions android
 
+## 0.0.9+5
+
+* Fix pub point.
+* Update package
+
+
 
 
 

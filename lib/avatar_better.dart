@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 
+library;
+
 import 'dart:io';
 
 import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';

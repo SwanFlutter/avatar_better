@@ -1,9 +1,3 @@
-// ignore_for_file: unrelated_type_equality_checks, depend_on_referenced_packages
-
-/// Handles permissions based on the Android version.
-///
-/// Requests different permissions depending on the Android version.
-///
 /*
 Future<void> handlePermissions() async {
   if (Platform.isAndroid) {
