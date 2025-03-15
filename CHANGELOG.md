@@ -46,7 +46,7 @@
 * Update package
 
 
-## 0.0.9+6
+## 0.1.0
 
 * Fix bug.
 * Update package
