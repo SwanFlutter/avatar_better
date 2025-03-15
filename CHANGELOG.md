@@ -46,6 +46,11 @@
 * Update package
 
 
+## 0.0.9+6
+
+* Fix bug.
+* Update package
+* Add new 3 feature
 
 
 
