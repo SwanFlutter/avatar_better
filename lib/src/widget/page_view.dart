@@ -251,19 +251,19 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
       bool isSaved = false;
 
       if (kIsWeb || Platform.isWindows || Platform.isLinux) {
-        isSaved = await FlutterSaver.saveFileWindowsWeb(
+        isSaved = await FlutterSaver.saveNetworkFileWindowsWeb(
           link: widget.imageNetwork!,
         );
       } else if (Platform.isAndroid) {
-        isSaved = await FlutterSaver.saveFileAndroid(
+        isSaved = await FlutterSaver.saveNetworkFileAndroid(
           link: widget.imageNetwork!,
         );
       } else if (Platform.isIOS) {
-        isSaved = await FlutterSaver.saveFileIos(
+        isSaved = await FlutterSaver.saveNetworkFileIos(
           link: widget.imageNetwork!,
         );
       } else if (Platform.isMacOS) {
-        isSaved = await FlutterSaver.saveFileMac(
+        isSaved = await FlutterSaver.saveNetworkFileMac(
           link: widget.imageNetwork!,
         );
       } else {
@@ -275,20 +275,24 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
         widget.listImageNetwork!.isNotEmpty) {
       bool isSaved = false;
 
-      if (kIsWeb || Platform.isWindows || Platform.isLinux) {
-        isSaved = await FlutterSaver.saveFileWindowsWeb(
+      if (kIsWeb || Platform.isWindows) {
+        isSaved = await FlutterSaver.saveNetworkFileWindowsWeb(
+          link: widget.listImageNetwork!.last,
+        );
+      } else if (Platform.isLinux) {
+        isSaved = await FlutterSaver.saveNetworkFileLinux(
           link: widget.listImageNetwork!.last,
         );
       } else if (Platform.isAndroid) {
-        isSaved = await FlutterSaver.saveFileAndroid(
+        isSaved = await FlutterSaver.saveNetworkFileAndroid(
           link: widget.listImageNetwork!.last,
         );
       } else if (Platform.isIOS) {
-        isSaved = await FlutterSaver.saveFileIos(
+        isSaved = await FlutterSaver.saveNetworkFileIos(
           link: widget.listImageNetwork!.last,
         );
       } else if (Platform.isMacOS) {
-        isSaved = await FlutterSaver.saveFileMac(
+        isSaved = await FlutterSaver.saveNetworkFileMac(
           link: widget.listImageNetwork!.last,
         );
       } else {

@@ -21,16 +21,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.2.2
-  image_cropper: ^8.0.2
+  http: ^1.3.0
+  image_cropper: ^9.0.0
   image_picker: ^1.1.2
-  zoom_hover_pinch_image: ^1.0.3
-  image_cropping: ^0.0.14
-  flutter_saver: ^0.0.3
-  device_info_plus: ^11.1.1
+  zoom_hover_pinch_image: ^1.0.4
+  image_cropping: ^0.0.15
+  flutter_saver: ^0.0.5
+  device_info_plus: ^11.3.3
 
-dependency_overrides:
-  path: 1.9.0
+
 
 
 dev_dependencies:

@@ -1,11 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, unnecessary_null_comparison
 
 library;
 
 import 'dart:io';
 
 import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
-//import 'package:avatar_better/src/tools/extensions/permissions_request.dart';
 import 'package:avatar_better/src/tools/extensions/text_to_color.dart';
 import 'package:avatar_better/src/tools/gradiant_random_tools.dart';
 import 'package:avatar_better/src/tools/gradient_circle_painter.dart';
@@ -80,7 +79,7 @@ class Avatar extends StatefulWidget {
   /// [image]: The imageAssets for the profile.
   final String? image;
 
-  /// [imageNetwork]: The image URL list for pageView  profile.
+  /// [imageNetwork]: The image URL list for pageView profile.
   final String? imageNetwork;
 
   /// [listImageNetwork]: The images URL for the profile.
@@ -95,10 +94,10 @@ class Avatar extends StatefulWidget {
   /// [gradientWidthBorder]: The gradient for the profile's border (default: linear gradient from blue to deep purple).
   final Gradient? gradientWidthBorder;
 
-  /// [elevation]: create shadow widget  (can be null).
+  /// [elevation]: create shadow widget (can be null).
   final double elevation;
 
-  ///[shadowColor]: elevation color .
+  ///[shadowColor]: elevation color.
   final Color? shadowColor;
 
   /// [text]: The text to display on the profile.
@@ -124,6 +123,15 @@ class Avatar extends StatefulWidget {
   final List<DropdownMenuItem<String>>? Function(int index)?
       itemsBuilderDropdownMenuItem;
 
+  /// [useMaterialColorForGradient]: Use material color for gradient. Default = true
+  final bool useMaterialColorForGradient;
+
+  /// [mixColorForGradient]: Mix color for gradient. Default = false
+  final bool mixColorForGradient;
+
+  /// [child]: The child widget to display inside the avatar.
+  final Widget? child;
+
   Avatar({
     super.key,
     required this.text,
@@ -147,12 +155,18 @@ class Avatar extends StatefulWidget {
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
     bool randomGradient = false,
+    this.useMaterialColorForGradient = true,
+    this.mixColorForGradient = false,
+    this.child,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
-      gradientBackgroundColor =
-          GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor = GradientRandomTools.getGradient(
+        text.toString(),
+        material: useMaterialColorForGradient,
+        dynamicMix: mixColorForGradient,
+      );
     } else {
       backgroundColor = backgroundColor;
     }
@@ -188,13 +202,13 @@ class Avatar extends StatefulWidget {
     final TextStyle? style = const TextStyle(
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
 
-    /// [backgroundColorCamera] : color background picker
+    /// [backgroundColorCamera]: Color background picker
     final Color backgroundColorCamera = Colors.white,
 
-    /// [icon]: icon picker
+    /// [icon]: Icon picker
     final IconData? icon = Icons.camera,
 
-    /// [iconColor]: color picker icon
+    /// [iconColor]: Color picker icon
     final Color iconColor = Colors.black,
 
     /// [randomColor]: A boolean flag for randomizing the background color of the profile.
@@ -203,13 +217,13 @@ class Avatar extends StatefulWidget {
     /// [randomGradient]: A boolean flag for randomizing the background gradient of the profile.
     bool randomGradient = false,
 
-    ///[elevation]: elevation color.
+    ///[elevation]: Elevation color.
     final double elevation = 0,
 
-    /// [shadowColor]: create shadow widget  (can be null).
+    /// [shadowColor]: Create shadow widget (can be null).
     final Color shadowColor = Colors.black,
 
-    ///[onPickerChange ]:is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
+    ///[onPickerChange]: Is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
     /// This callback has a parameter named value that passes the new value of the picker to it.
     final OnPickerChange? onPickerChange,
 
@@ -227,17 +241,29 @@ class Avatar extends StatefulWidget {
     /// The default value for this parameter is `null`, but you can specify a function as a default value to be called if no function is selected.
     final OnPickerChangeWeb? onPickerChangeWeb,
 
-    /// [OptionsCrop] : Configuration options for image cropping functionality.
+    /// [OptionsCrop]: Configuration options for image cropping functionality.
     final OptionsCrop? optionsCrop,
 
-    /// [BottomSheetStyles] : Configuration for customizing the bottom sheet's appearance and behavior.
+    /// [BottomSheetStyles]: Configuration for customizing the bottom sheet's appearance and behavior.
     final BottomSheetStyles? bottomSheetStyles,
+
+    /// [useMaterialColorForGradient]: Use material color for gradient
+    final bool useMaterialColorForGradient = true,
+
+    /// [mixColorForGradient]: Mix color for gradient
+    final bool mixColorForGradient = false,
+
+    /// [child]: Child widget
+    final Widget? child,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text!);
     } else if (randomGradient) {
-      gradientBackgroundColor =
-          GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor = GradientRandomTools.getGradient(
+        text.toString(),
+        material: useMaterialColorForGradient,
+        dynamicMix: mixColorForGradient,
+      );
     } else {
       backgroundColor = backgroundColor;
     }
@@ -263,6 +289,7 @@ class Avatar extends StatefulWidget {
       onPickerChangeWeb: onPickerChangeWeb,
       optionsCrop: optionsCrop,
       bottomSheetStyles: bottomSheetStyles,
+      child: child,
     );
   }
 
@@ -274,16 +301,6 @@ class Avatar extends StatefulWidget {
 }
 
 class _AvatarState extends State<Avatar> {
-  /* @override
-  void initState() {
-    super.initState();
-    handlePermissions().then((_) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }*/
-
   @override
   Widget build(BuildContext context) {
     File? imagePicker;
@@ -339,7 +356,6 @@ class _AvatarState extends State<Avatar> {
                     color: widget.backgroundColor,
                     gradient: widget.gradientBackgroundColor,
                     shape: BoxShape.circle,
-                    // ignore: unnecessary_null_comparison
                     image: imagePicker != null
                         ? DecorationImage(
                             image: FileImage(imagePicker),
@@ -361,17 +377,16 @@ class _AvatarState extends State<Avatar> {
                                   )
                                 : null,
                   ),
-                  // ignore: unnecessary_null_comparison
-                  child: (imagePicker == null &&
-                          widget.imageNetwork == null &&
-                          widget.image == null &&
-                          widget.listImageNetwork == null &&
-                          widget.text != null)
-                      ? Text(
-                          AvatarCircleExtensions.initials(widget.text!),
-                          style: widget.style,
-                        )
-                      : const Text(''),
+                  child: widget.child ??
+                      (widget.imageNetwork == null &&
+                              widget.image == null &&
+                              widget.listImageNetwork == null &&
+                              widget.text != null
+                          ? Text(
+                              AvatarCircleExtensions.initials(widget.text!),
+                              style: widget.style,
+                            )
+                          : const Text('')),
                 ),
               ),
             )
@@ -389,7 +404,6 @@ class _AvatarState extends State<Avatar> {
                   color: widget.backgroundColor,
                   gradient: widget.gradientBackgroundColor,
                   shape: BoxShape.circle,
-                  // ignore: unnecessary_null_comparison
                   image: imagePicker != null
                       ? DecorationImage(
                           image: FileImage(imagePicker),
@@ -411,17 +425,16 @@ class _AvatarState extends State<Avatar> {
                                 )
                               : null,
                 ),
-                // ignore: unnecessary_null_comparison
-                child: (imagePicker == null &&
-                        widget.imageNetwork == null &&
-                        widget.image == null &&
-                        widget.listImageNetwork == null &&
-                        widget.text != null)
-                    ? Text(
-                        AvatarCircleExtensions.initials(widget.text!),
-                        style: widget.style,
-                      )
-                    : const Text(''),
+                child: widget.child ??
+                    (widget.imageNetwork == null &&
+                            widget.image == null &&
+                            widget.listImageNetwork == null &&
+                            widget.text != null
+                        ? Text(
+                            AvatarCircleExtensions.initials(widget.text!),
+                            style: widget.style,
+                          )
+                        : const Text('')),
               ),
             ),
     );

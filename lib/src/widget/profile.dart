@@ -34,14 +34,14 @@ extension ProfileExtensions on Profile {
   }
 }
 
-///Example:
+/// Example:
 ///
-///```dart
-///Profile(
-///text: avatar[index],
-///radius: 35,
-///randomGradient: true,
-///randomColor: false,
+/// ```dart
+/// Profile(
+///   text: avatar[index],
+///   radius: 35,
+///   randomGradient: true,
+///   randomColor: false,
 /// )
 /// ```
 
@@ -73,40 +73,49 @@ class Profile extends StatefulWidget {
   /// [style]: The text style (default: font size 25, white color, and bold).
   final TextStyle? style;
 
-  /// [backgroundColorCamera] : color background picker
+  /// [backgroundColorCamera]: Color background picker
   final Color backgroundColorCamera;
 
-  /// [icon]: icon picker
+  /// [icon]: Icon picker
   final IconData? icon;
 
-  /// [iconColor]: color picker icon
+  /// [iconColor]: Color picker icon
   final Color iconColor;
 
-  ///[onPickerChange ]:is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
+  /// [onPickerChange]: An optional property in the [Picker] class that allows you to call a callback when the picker value changes.
   /// This callback has a parameter named value that passes the new value of the picker to it.
   final OnPickerChange? onPickerChange;
 
-  /// The isBorderAvatar parameter, if true, creates a border for the avatar.
+  /// The [isBorderAvatar] parameter, if true, creates a border for the avatar.
   /// This border contains a circular border with a default width of 5 and a color of LinearGradient.
   /// If this parameter is false, no border will be created for the avatar.
   final bool isBorderAvatar;
 
-  ///[elevation]: elevation color.
+  /// [elevation]: Elevation color.
   final double elevation;
 
-  /// [shadowColor]: create shadow widget  (can be null).
+  /// [shadowColor]: Create shadow widget (can be null).
   final Color? shadowColor;
 
-  /// [onPickerChangeWeb] :is an optional property in the [Picker] class that allows you to call a callback when the picker value changes.
+  /// [onPickerChangeWeb]: An optional property in the [Picker] class that allows you to call a callback when the picker value changes.
   final OnPickerChangeWeb? onPickerChangeWeb;
 
-  /// [OptionsCrop] : Configuration options for image cropping functionality.
+  /// [OptionsCrop]: Configuration options for image cropping functionality.
   final OptionsCrop? optionsCrop;
 
-  /// [BottomSheetStyles] : Configuration for customizing the bottom sheet's appearance and behavior.
+  /// [BottomSheetStyles]: Configuration for customizing the bottom sheet's appearance and behavior.
   final BottomSheetStyles? bottomSheetStyles;
 
   final OptionsCropWindMacLinux? optionsCropWindMacLinux;
+
+  /// [useMaterialColorForGradient]: Use material color for gradient. Default = true
+  final bool useMaterialColorForGradient;
+
+  /// [mixColorForGradient]: Mix color for gradient. Default = false
+  final bool mixColorForGradient;
+
+  /// [child]: The child widget to display inside the avatar.
+  final Widget? child;
 
   Profile({
     super.key,
@@ -134,12 +143,18 @@ class Profile extends StatefulWidget {
         fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
     bool randomColor = true,
     bool randomGradient = false,
+    this.useMaterialColorForGradient = true,
+    this.mixColorForGradient = false,
+    this.child,
   }) {
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
-      gradientBackgroundColor =
-          GradientRandomTools.getGradient(text.toString());
+      gradientBackgroundColor = GradientRandomTools.getGradient(
+        text.toString(),
+        material: useMaterialColorForGradient,
+        dynamicMix: mixColorForGradient,
+      );
     } else {
       backgroundColor = backgroundColor;
     }
@@ -177,7 +192,6 @@ class _ProfileState extends State<Profile> {
             child: InkResponse(
               onTap: () {
                 customBottomPickerImage(context);
-                // Navigator.pop(context);
               },
               child: CircleAvatar(
                 radius: widget.radius != null ? widget.radius! / 3.5 : 0,

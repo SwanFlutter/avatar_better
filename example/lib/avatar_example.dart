@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:avatar_better/avatar_better.dart';
 import 'package:flutter/material.dart';
 
-class AvatarExample extends StatefulWidget {
-  const AvatarExample({Key? key}) : super(key: key);
+class AvatarExampleProfile extends StatefulWidget {
+  const AvatarExampleProfile({Key? key}) : super(key: key);
 
   @override
-  State<AvatarExample> createState() => _AvatarExampleState();
+  State<AvatarExampleProfile> createState() => _AvatarExampleProfileState();
 }
 
-class _AvatarExampleState extends State<AvatarExample> {
+class _AvatarExampleProfileState extends State<AvatarExampleProfile> {
   File? image;
 
   static List<String> alphabet = [
