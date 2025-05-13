@@ -1,18 +1,18 @@
+import 'package:avatar_better/avatar/profile.dart';
 import 'package:avatar_better/src/tools/gradient_circle_painter.dart';
-import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MultiPlatform extends StatelessWidget {
   /// Represents a profile widget.
-  final Profile widget;
+  final Profile profile;
 
   /// Represents the image bytes for web.
   final Uint8List? imageBytesWeb;
 
   const MultiPlatform({
     super.key,
-    required this.widget,
+    required this.profile,
     required this.imageBytesWeb,
   });
   @override
@@ -23,46 +23,46 @@ class MultiPlatform extends StatelessWidget {
         image: MemoryImage(Uint8List.fromList(imageBytesWeb!)),
         fit: BoxFit.cover,
       );
-    } else if (widget.imageNetwork != null) {
+    } else if (profile.imageNetwork != null) {
       decorationImage = DecorationImage(
-        image: NetworkImage(widget.imageNetwork!),
+        image: NetworkImage(profile.imageNetwork!),
         fit: BoxFit.cover,
       );
-    } else if (widget.image != null) {
+    } else if (profile.image != null) {
       decorationImage = DecorationImage(
-        image: AssetImage(widget.image!),
+        image: AssetImage(profile.image!),
         fit: BoxFit.cover,
       );
     }
-    return widget.isBorderAvatar
+    return profile.isBorderAvatar
         ? CustomPaint(
             painter: GradientCirclePainter(
-              gradientColors: widget.gradientWidthBorder,
-              withBorder: widget.widthBorder,
+              gradientColors: profile.gradientWidthBorder,
+              withBorder: profile.widthBorder,
             ),
             child: Material(
               type: MaterialType.circle,
-              elevation: widget.elevation,
-              shadowColor: widget.shadowColor,
+              elevation: profile.elevation,
+              shadowColor: profile.shadowColor,
               color: Colors.transparent,
               borderRadius: null,
               child: Container(
                 alignment: Alignment.center,
-                height: widget.radius != null ? widget.radius! * 2.2 : 35,
-                width: widget.radius != null ? widget.radius! * 2.2 : 35,
+                height: profile.radius != null ? profile.radius! * 2.2 : 35,
+                width: profile.radius != null ? profile.radius! * 2.2 : 35,
                 decoration: BoxDecoration(
-                  color: widget.backgroundColor,
-                  gradient: widget.gradientBackgroundColor,
+                  color: profile.backgroundColor,
+                  gradient: profile.gradientBackgroundColor,
                   shape: BoxShape.circle,
                   image: decorationImage,
                 ),
                 child: (imageBytesWeb == null &&
-                        widget.imageNetwork == null &&
-                        widget.image == null &&
-                        widget.text != null)
+                        profile.imageNetwork == null &&
+                        profile.image == null &&
+                        profile.text != null)
                     ? Text(
-                        ProfileExtensions.initials(widget.text!),
-                        style: widget.style,
+                        ProfileExtensions.initials(profile.text!),
+                        style: profile.style,
                       )
                     : const Text(''),
               ),
@@ -70,27 +70,27 @@ class MultiPlatform extends StatelessWidget {
           )
         : Material(
             type: MaterialType.circle,
-            elevation: widget.elevation,
-            shadowColor: widget.shadowColor,
+            elevation: profile.elevation,
+            shadowColor: profile.shadowColor,
             color: Colors.transparent,
             borderRadius: null,
             child: Container(
               alignment: Alignment.center,
-              height: widget.radius != null ? widget.radius! * 2.2 : 35,
-              width: widget.radius != null ? widget.radius! * 2.2 : 35,
+              height: profile.radius != null ? profile.radius! * 2.2 : 35,
+              width: profile.radius != null ? profile.radius! * 2.2 : 35,
               decoration: BoxDecoration(
-                color: widget.backgroundColor,
-                gradient: widget.gradientBackgroundColor,
+                color: profile.backgroundColor,
+                gradient: profile.gradientBackgroundColor,
                 shape: BoxShape.circle,
                 image: decorationImage,
               ),
               child: (imageBytesWeb == null &&
-                      widget.imageNetwork == null &&
-                      widget.image == null &&
-                      widget.text != null)
+                      profile.imageNetwork == null &&
+                      profile.image == null &&
+                      profile.text != null)
                   ? Text(
-                      ProfileExtensions.initials(widget.text!),
-                      style: widget.style,
+                      ProfileExtensions.initials(profile.text!),
+                      style: profile.style,
                     )
                   : const Text(''),
             ),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:avatar_better/avatar/profile.dart';
 import 'package:avatar_better/src/tools/gradient_circle_painter.dart';
-import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/material.dart';
 
 class IsBorderAvatar extends StatelessWidget {

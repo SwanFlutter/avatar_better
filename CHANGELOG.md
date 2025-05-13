@@ -52,5 +52,8 @@
 * Update package
 * Add new 3 feature
 
+## 0.1.1
+
+* Fix bug picker profile.
 
 

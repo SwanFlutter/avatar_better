@@ -4,6 +4,7 @@ library;
 
 import 'dart:io';
 
+import 'package:avatar_better/avatar/profile.dart';
 import 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
 import 'package:avatar_better/src/tools/extensions/text_to_color.dart';
 import 'package:avatar_better/src/tools/gradiant_random_tools.dart';
@@ -11,7 +12,6 @@ import 'package:avatar_better/src/tools/gradient_circle_painter.dart';
 import 'package:avatar_better/src/tools/options_crop.dart';
 import 'package:avatar_better/src/tools/profile_image_viewer_options.dart';
 import 'package:avatar_better/src/widget/page_view.dart';
-import 'package:avatar_better/src/widget/profile.dart';
 import 'package:flutter/material.dart';
 
 export 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
