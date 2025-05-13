@@ -11,13 +11,16 @@ import 'package:permission_master/permission_master.dart';
 class ImageTools {
   final ImagePicker _imagePicker;
   final ImageCropper _imageCropper;
-  final PermissionMaster _permissionMaster = PermissionMaster();
+  final PermissionMaster? _permissionMaster;
 
   ImageTools({
     ImagePicker? imagePicker,
     ImageCropper? imageCropper,
   })  : _imagePicker = imagePicker ?? ImagePicker(),
-        _imageCropper = imageCropper ?? ImageCropper();
+        _imageCropper = imageCropper ?? ImageCropper(),
+        // Only initialize PermissionMaster for Android and iOS
+        _permissionMaster =
+            (Platform.isAndroid || Platform.isIOS) ? PermissionMaster() : null;
 
   bool multiple = false;
 
@@ -25,13 +28,13 @@ class ImageTools {
   int? _androidSdkVersion;
   Future<int> getAndroidSdkVersion() async {
     if (_androidSdkVersion != null) return _androidSdkVersion!;
-    if (kIsWeb || !Platform.isAndroid) {
+    if (!Platform.isAndroid) {
       _androidSdkVersion = 0;
       return _androidSdkVersion!;
     }
     try {
       String? platformVersionString =
-          await _permissionMaster.getPlatformVersion();
+          await _permissionMaster?.getPlatformVersion();
       if (platformVersionString != null) {
         // Remove "Android " prefix if present (e.g., "Android 13" -> "13")
         if (platformVersionString.startsWith("Android ")) {
@@ -89,22 +92,25 @@ class ImageTools {
   }
 
   Future<List<XFile>> pickImage(ImageSource imageSource, bool multiple) async {
-    // Request appropriate permissions based on image source
-    PermissionStatus permissionStatus;
+    // Only request permissions on Android or iOS
+    if (Platform.isAndroid || Platform.isIOS) {
+      // Request appropriate permissions based on image source
+      PermissionStatus permissionStatus;
 
-    if (imageSource == ImageSource.camera) {
-      permissionStatus = await _permissionMaster.requestCameraPermission();
-    } else {
-      permissionStatus = await _permissionMaster.requestStoragePermission();
-    }
-
-    if (permissionStatus != PermissionStatus.granted) {
-      debugPrint('Permission denied for ${imageSource.name}');
-      if (permissionStatus == PermissionStatus.openSettings) {
-        // Permanent denial, suggest opening app settings
-        await _permissionMaster.openAppSettings();
+      if (imageSource == ImageSource.camera) {
+        permissionStatus = await _permissionMaster!.requestCameraPermission();
+      } else {
+        permissionStatus = await _permissionMaster!.requestStoragePermission();
       }
-      return [];
+
+      if (permissionStatus != PermissionStatus.granted) {
+        debugPrint('Permission denied for ${imageSource.name}');
+        if (permissionStatus == PermissionStatus.openSettings) {
+          // Permanent denial, suggest opening app settings
+          await _permissionMaster!.openAppSettings();
+        }
+        return [];
+      }
     }
 
     try {
@@ -116,19 +122,7 @@ class ImageTools {
           requestFullMetadata: false, // Attempt to fix Android 9 URI issue
         );
         if (file != null) {
-          // Verify file exists and is accessible, especially important for Android 9 (API 28)
-          // if (Platform.isAndroid) { // Temporarily bypass Android 9 specific validation
-          //   final sdkVersion = await getAndroidSdkVersion();
-          //   if (sdkVersion == 28) { // Android 9 (API 28)
-          //     try {
-          //       // Verify the file is accessible by reading its bytes
-          //       // await file.readAsBytes();
-          //     } catch (e) {
-          //       debugPrint('Error verifying file access on Android 9 (validation bypassed): $e');
-          //       // return []; // Do not return empty if validation fails, let cropper try
-          //     }
-          //   }
-          // }
+          // Android 9 specific handling
           if (Platform.isAndroid) {
             final sdkVersion = await getAndroidSdkVersion();
             if (sdkVersion == 28) {
@@ -182,19 +176,6 @@ class ImageTools {
     int? maxWidth,
   }) async {
     try {
-      // For Android 9 (API 28), we need to ensure the file path is valid
-      // if (Platform.isAndroid) { // Temporarily bypass Android 9 specific validation
-      //   final sdkVersion = await getAndroidSdkVersion();
-      //   if (sdkVersion == 28) { // Android 9 (API 28)
-      //     // Verify file exists before cropping
-      //     // final fileExists = await File(file.path).exists();
-      //     // if (!fileExists) {
-      //     //   debugPrint('File does not exist at path (validation bypassed): ${file.path}');
-      //     //   return null;
-      //     // }
-      //   }
-      // }
-
       return await _imageCropper.cropImage(
         sourcePath: file.path,
         aspectRatio: aspectRatio,
@@ -258,7 +239,6 @@ class ImageTools {
     return null;
   }
 }
-
 /*
 
 

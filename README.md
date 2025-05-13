@@ -58,7 +58,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  avatar_better: ^0.1.1
+  avatar_better: ^0.1.2
 ```
 
 Then run:

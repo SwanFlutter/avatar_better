@@ -57,3 +57,6 @@
 * Fix bug picker profile.
 
 
+## 0.1.2
+
+* Fix picker profile.
