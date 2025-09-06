@@ -3,7 +3,8 @@
 
 A complete Flutter package for implementing customizable avatars and profile images with various styling options and interactive features.
 
-![avatar3](https://github.com/user-attachments/assets/6187c133-cd0b-4056-83ac-4c0de47a21e1)
+<img width="387" height="865" alt="1" src="https://github.com/user-attachments/assets/ef76f50b-9ab9-43ca-831a-d6c71bf174f3" />
+
 
 ## Table of Contents
 
@@ -46,11 +47,12 @@ A complete Flutter package for implementing customizable avatars and profile ima
 
 ## Screenshots
 
-![Capture](https://github.com/user-attachments/assets/ac2d54f4-562b-4ef5-bce6-62cd196c9877)
+<img width="1263" height="681" alt="2" src="https://github.com/user-attachments/assets/7f59f68a-ac8f-4028-ad42-ee443c2a9ab8" />
+
 
 ![avatar2](https://github.com/user-attachments/assets/6aa52c2f-cacb-419f-b33e-1ba0da30c454)![avatar1](https://github.com/user-attachments/assets/13031a8f-1e5f-489c-98a9-720046a9ce8d)
 
-![avatar](https://github.com/user-attachments/assets/42da29bc-a1bf-433b-a78d-65032c2971aa)![avatar3](https://github.com/user-attachments/assets/6187c133-cd0b-4056-83ac-4c0de47a21e1)
+![avatar](https://github.com/user-attachments/assets/42da29bc-a1bf-433b-a78d-65032c2971aa)
 
 ## Installation
 
