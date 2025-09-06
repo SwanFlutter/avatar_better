@@ -26,8 +26,7 @@ dependencies:
   flutter_saver: ^0.0.5
   path_provider: ^2.0.0
   picker_image_cropper:
-    git:
-      url: https://github.com/SwanFlutter/picker_image_cropper.git
+    path: /Android/Pakege/picker_image_cropper
 
 dev_dependencies:
   flutter_test:
