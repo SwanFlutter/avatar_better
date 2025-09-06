@@ -23,7 +23,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.4"
+    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -399,14 +399,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  permission_master:
-    dependency: transitive
-    description:
-      name: permission_master
-      sha256: "1c65f1b6eb73d6e2b620923859ab71701ae7ad50e0a26fe3eda661101ec6cce0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.12"
   petitparser:
     dependency: transitive
     description:

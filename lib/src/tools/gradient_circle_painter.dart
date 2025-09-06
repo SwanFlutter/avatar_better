@@ -6,10 +6,7 @@ class GradientCirclePainter extends CustomPainter {
   final Gradient? gradientColors;
   final double withBorder;
 
-  GradientCirclePainter({
-    this.gradientColors,
-    required this.withBorder,
-  });
+  GradientCirclePainter({this.gradientColors, required this.withBorder});
 
   @override
   void paint(Canvas canvas, Size size) {

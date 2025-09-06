@@ -43,7 +43,7 @@ class OptionsCropWindMacLinux {
   /// Default = true
   bool useDraggableCropper;
 
-  /// The maximum dimension (width or height) to which large images are resized 
+  /// The maximum dimension (width or height) to which large images are resized
   /// before cropping to improve performance.
   ///
   /// Default = 1920

@@ -58,7 +58,10 @@ class PageViewAvatar extends StatefulWidget {
     this.listImageNetwork,
     this.namePageview,
     this.stylePageViewTextName = const TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0),
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+      fontSize: 22.0,
+    ),
     this.backgroundColorPageViewAppBar = Colors.white,
     this.widgetLoadingPageView,
     this.backgroundColorDropdownMenuItem = Colors.white,
@@ -87,8 +90,9 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
-    var sortedListImageNetwork =
-        List<String>.from(widget.listImageNetwork ?? []);
+    var sortedListImageNetwork = List<String>.from(
+      widget.listImageNetwork ?? [],
+    );
     sortedListImageNetwork.sort((a, b) => a.length.compareTo(b.length));
 
     var sortedListImage = List<String>.from(widget.listImageNetwork ?? []);
@@ -109,10 +113,13 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
             widget.backgroundColorPageViewAppBar ?? theme.primaryColorLight,
         actions: [
           DropdownButton(
-            dropdownColor: widget.backgroundColorDropdownMenuItem ??
+            dropdownColor:
+                widget.backgroundColorDropdownMenuItem ??
                 Theme.of(context).primaryColorLight,
-            icon:
-                Icon(Icons.more_vert, color: widget.iconColorDropdownMenuItem),
+            icon: Icon(
+              Icons.more_vert,
+              color: widget.iconColorDropdownMenuItem,
+            ),
             underline: const Divider(color: Colors.transparent),
             items: [
               DropdownMenuItem<String>(
@@ -129,49 +136,51 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                   saveImage(context);
                 },
               ),
-              ...?widget.widget.itemsBuilderDropdownMenuItem!(indexForPageView)
+              ...?widget.widget.itemsBuilderDropdownMenuItem!(indexForPageView),
             ],
             onChanged: (String? value) {},
           ),
         ],
       ),
-      body: widget.imagePicker == null &&
+      body:
+          widget.imagePicker == null &&
               widget.image == null &&
               widget.imageNetwork == null &&
               widget.listImageNetwork != null
           ? widget.listImageNetwork != null
-              ? Zoom.zoomOnTap(
-                  zoomedScale: 3.0,
-                  doubleTapZoom: true,
-                  clipBehavior: true,
-                  width: size.width,
-                  height: size.height,
-                  child: PageView.builder(
-                    reverse: true,
-                    controller: _pageController,
-                    itemCount: sortedListImage.length,
-                    itemBuilder: (context, index) {
-                      indexForPageView = index;
-                      imageIndex = widget.listImageNetwork!.indexOf(
-                        sortedListImage[index],
-                      );
-                      if (index <= sortedListImage.length) {
-                        return Image.network(
+                ? Zoom.zoomOnTap(
+                    zoomedScale: 3.0,
+                    doubleTapZoom: true,
+                    clipBehavior: true,
+                    width: size.width,
+                    height: size.height,
+                    child: PageView.builder(
+                      reverse: true,
+                      controller: _pageController,
+                      itemCount: sortedListImage.length,
+                      itemBuilder: (context, index) {
+                        indexForPageView = index;
+                        imageIndex = widget.listImageNetwork!.indexOf(
                           sortedListImage[index],
-                          width: size.width,
-                          height: size.height,
-                          fit: widget.fitBackgroundImage,
                         );
-                      } else {
-                        return Container(); // یک ویجت خالی به عنوان fallback
-                      }
-                    },
-                  ),
-                )
-              : Center(
-                  child: widget.widgetLoadingPageView ??
-                      const CircularProgressIndicator(),
-                )
+                        if (index <= sortedListImage.length) {
+                          return Image.network(
+                            sortedListImage[index],
+                            width: size.width,
+                            height: size.height,
+                            fit: widget.fitBackgroundImage,
+                          );
+                        } else {
+                          return Container(); // یک ویجت خالی به عنوان fallback
+                        }
+                      },
+                    ),
+                  )
+                : Center(
+                    child:
+                        widget.widgetLoadingPageView ??
+                        const CircularProgressIndicator(),
+                  )
           : Zoom.zoomOnTap(
               zoomedScale: 3.0,
               doubleTapZoom: true,
@@ -201,7 +210,7 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
                       width: size.width,
                       height: size.height,
                       fit: widget.fitBackgroundImage,
-                    )
+                    ),
                 ],
               ),
             ),
@@ -217,7 +226,8 @@ class _PageViewAvatarState extends State<PageViewAvatar> {
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
         content: Text(
-            isSaved ? 'Image saved successfully!' : 'Failed to save image.'),
+          isSaved ? 'Image saved successfully!' : 'Failed to save image.',
+        ),
       ),
     );
   }

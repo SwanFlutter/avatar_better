@@ -24,11 +24,7 @@ A complete Flutter package for implementing customizable avatars and profile ima
   - [ProfileImageViewerOptions Properties](#profileimagevieweroptions-properties)
   - [BottomSheetStyles Properties](#bottomsheetstyles-properties)
   - [OptionsCrop Properties](#optionscrop-properties)
-- [Platform Setup](#platform-setup)
-  - [Android](#android)
-  - [iOS](#ios)
-  - [macOS](#macos)
-  - [Web](#web)
+- [Platform Support](#platform-support)
 - [Related Packages](#related-packages)
 - [Contact & Support](#contact--support)
 
@@ -58,7 +54,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  avatar_better: ^0.1.2
+  avatar_better: ^1.0.0
 ```
 
 Then run:
@@ -236,99 +232,31 @@ Avatar.profile(
 | `useDraggableCropper` | `bool`              | Enable draggable crop box                       |
 | `maxImageSize`        | `int`               | Max image dimension for performance              |
 
-## Platform Setup
+## Platform Support
 
-### Android
+This package works out of the box on all Flutter supported platforms:
 
-Add the following permissions to your `AndroidManifest.xml` file located at `android/app/src/main/AndroidManifest.xml`:
+✅ **Android** - No additional setup required  
+✅ **iOS** - No additional setup required  
+✅ **Web** - No additional setup required  
+✅ **Windows** - No additional setup required  
+✅ **macOS** - No additional setup required  
+✅ **Linux** - No additional setup required
 
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Add other permissions if needed by image_picker or other dependencies -->
-
-
-    <application
-        android:requestLegacyExternalStorage="true"
-        ...>
-
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        
-        <!-- Other activities, services, and receivers -->
-    </application>
-
-    <!-- For Android 11 (API level 30) and above, if you target SDK 30+ -->
-    <!-- You might need to declare specific package visibility -->
-    <queries>
-        <!-- If you want to open camera -->
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-        <!-- If you want to open gallery -->
-        <intent>
-            <action android:name="android.intent.action.GET_CONTENT" />
-            <data android:mimeType="image/*" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.PICK" />
-            <data android:mimeType="image/*" />
-        </intent>
-    </queries>
-
-</manifest>
-```
-
-**Note:** For Android 13 (API level 33) and above, `READ_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE` have been replaced by more granular permissions like `READ_MEDIA_IMAGES`, `READ_MEDIA_VIDEO`, and `READ_MEDIA_AUDIO`. Ensure you are using the correct permissions based on your `targetSdkVersion` and the types of files your app needs to access. The `image_picker` and `image_cropper` packages usually handle these, but it's good to be aware.
-
-### iOS
-
-Add the following keys to your `Info.plist` file located at `ios/Runner/Info.plist`:
-
-```xml
-<key>NSPhotoLibraryUsageDescription</key>
-<string>We need access to your photo library to select images for your avatar.</string>
-<key>NSCameraUsageDescription</key>
-<string>We need access to your camera to take photos for your avatar.</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>This app does not require microphone access. (This key might be added by other plugins, include if necessary)</string> 
-<key>NSPhotoLibraryAddUsageDescription</key>
-<string>This app needs access to your photo library to save images.</string>
-```
-
-### macOS
-
-Add this entitlement to your `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements` files to enable file selection:
-
-```xml
-<key>com.apple.security.files.user-selected.read-only</key>
-<true/>
-```
-
-### Web
-
-Add the following to the `<head>` section of your `web/index.html`:
-
-```html
-<!-- cropperjs -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-```
+**Note:** If you use the `Avatar.profile()` constructor with image picking and cropping functionality, please refer to the [picker_image_cropper](https://pub.dev/packages/picker_image_cropper) package documentation for any platform-specific setup requirements.
 
 ## Related Packages
 
 If you want a similar avatar package without cropping functionality, check out [avatar_better_pro](https://pub.dev/packages/avatar_better_pro).
 
-## Contact & Support
 
-If you have any issues, questions, or suggestions:
-- Email: [swan.dev1993@gmail.com](mailto:swan.dev1993@gmail.com)
-- GitHub: [https://github.com/SwanFlutter/avatar_better](https://github.com/SwanFlutter/avatar_better)
+## Additional information
 
-We welcome your feedback and contributions!
+If you have any issues, questions, or suggestions related to this package, please feel free to contact us at [swan.dev1993@gmail.com](mailto:swan.dev1993@gmail.com). We welcome your feedback and will do our best to address any problems or provide assistance.
+
+For more information about this package, you can also visit our [GitHub repository](https://github.com/SwanFlutter/avatar_better) where you can find additional resources, contribute to the package's development, and file issues or bug reports. We appreciate your contributions and feedback, and we aim to make this package as useful as possible for our users.
+
+Thank you for using our package, and we look forward to hearing from you!
+
 
 

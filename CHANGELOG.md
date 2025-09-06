@@ -1,18 +1,69 @@
-## 0.1.4
+## 0.0.5
 
-* **BREAKING CHANGE**: Replaced multiple image picker and cropper packages with unified `picker_image_cropper` package
-* Removed dependencies: `image_cropper`, `image_picker`, `image_cropping`
-* Added dependency: `picker_image_cropper` for unified cross-platform image picking and cropping
-* Simplified cropping options with modern UI and better performance
-* Updated OptionsCrop class to use new CropperTheme, CropAspectRatio, and CropOverlayType
-* Improved cross-platform compatibility for all supported platforms
-* Enhanced performance with isolate-based image processing
-* Added support for both bytes and file output types
+* Fix support web.
 
-## 0.1.3
+## 0.0.6
 
-* Previous version with multiple image picker/cropper packages
+* Add page view feature.
 
-## 0.0.1
+## 0.0.7
 
-* Initial release
+* Update Pack.
+
+## 0.0.8
+
+* Update Pack.
+* Support platform windows and mac.
+* Add new feature.
+
+
+## 0.0.9
+
+* Support all platform cropper image.
+
+## 0.0.9+1
+
+* Adit README.md.
+
+## 0.0.9+2
+
+* Add new feature.
+
+## 0.0.9+3
+
+* Fix color page view background.
+
+## 0.0.9+4
+
+* Fix pub point.
+* Update package
+* Edit README
+* Fix permisstions android
+
+## 0.0.9+5
+
+* Fix pub point.
+* Update package
+
+
+## 0.1.0
+
+* Fix bug.
+* Update package
+* Add new 3 feature
+
+## 0.1.1
+
+* Fix bug picker profile.
+
+
+## 0.1.2
+
+* Fix picker profile.
+
+## 1.0.0
+
+## 1.0.0
+
+* Add new Cropper Image
+* Update documentation.

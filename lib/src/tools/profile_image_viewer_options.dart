@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 class ProfileImageViewerOptions {
   /// [stylePageViewTextName ]:the style of the PageView text appbar.
   TextStyle? stylePageViewTextName = const TextStyle(
-      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22.0);
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+    fontSize: 22.0,
+  );
 
   /// [backgroundColorPageViewAppBar]: the background color of the PageView text appbar.
   Color? backgroundColorPageViewAppBar = Colors.white;

@@ -93,11 +93,7 @@ class GradientRandomTools {
 
   static final List<List<Color>> _materialGradients = [
     for (var primary in Colors.primaries)
-      [
-        primary.shade900,
-        primary.shade700,
-        primary.shade500,
-      ]
+      [primary.shade900, primary.shade700, primary.shade500],
   ];
 
   static List<Color> _mixColors(Color color1, Color color2, {int steps = 3}) {
@@ -141,12 +137,7 @@ class GradientRandomTools {
       );
     }
 
-    return LinearGradient(
-      colors: colors,
-      stops: stops,
-      begin: begin,
-      end: end,
-    );
+    return LinearGradient(colors: colors, stops: stops, begin: begin, end: end);
   }
 
   static LinearGradient customGradient({
@@ -161,11 +152,9 @@ class GradientRandomTools {
 
     return LinearGradient(
       colors: colors,
-      stops: stops ??
-          List.generate(
-            colors.length,
-            (index) => index / (colors.length - 1),
-          ),
+      stops:
+          stops ??
+          List.generate(colors.length, (index) => index / (colors.length - 1)),
       begin: begin,
       end: end,
     );
