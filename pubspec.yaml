@@ -25,8 +25,8 @@ dependencies:
   zoom_hover_pinch_image: ^1.0.4
   flutter_saver: ^0.0.5
   path_provider: ^2.0.0
-  picker_image_cropper:
-    path: /Android/Pakege/picker_image_cropper
+  picker_image_cropper: ^0.0.1
+    
 
 dev_dependencies:
   flutter_test:
