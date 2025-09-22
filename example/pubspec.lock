@@ -23,7 +23,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -410,12 +410,11 @@ packages:
   picker_image_cropper:
     dependency: transitive
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "3cebae7e764888e90d9b1ec2dc51a513ee162971"
-      url: "https://github.com/SwanFlutter/picker_image_cropper.git"
-    source: git
-    version: "0.0.1"
+      name: picker_image_cropper
+      sha256: "35fbe39c7102bc09c220ef79210277361a59b07cbf0a7d31d67fa4306ef4bc22"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   platform:
     dependency: transitive
     description:

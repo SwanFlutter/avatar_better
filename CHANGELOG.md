@@ -63,7 +63,10 @@
 
 ## 1.0.0
 
-## 1.0.0
-
 * Add new Cropper Image
 * Update documentation.
+
+## 1.0.1
+
+* Fix bub point
+
