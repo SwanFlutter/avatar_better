@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 class TextToColor {
   static Random rand = Random();
@@ -23,7 +24,7 @@ class TextToColor {
     return hash;
   }
 
-  static int toIntColor(str) {
+  static int toIntColor(String? str) {
     try {
       var hash = _getInt(str);
       var r = (hash & 0xFF0000) >> 8;
@@ -47,7 +48,7 @@ class TextToColor {
     }
   }
 
-  static Color toColor(str) {
+  static Color toColor(String? str) {
     return Color(toIntColor(str));
   }
 }
