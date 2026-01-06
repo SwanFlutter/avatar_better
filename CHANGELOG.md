@@ -1,9 +1,18 @@
 
-## 0.1.2
+
+---
+
+
+## 1.0.2
 * Fix null check operator used on a null value crash when text is null.
 * Add validation to prevent both `randomColor` and `randomGradient` from being true simultaneously.
 * Add validation to ensure `backgroundColor` cannot be set when random flags are active.
 * Add validation to ensure `gradientBackgroundColor` cannot be set when random flags are active.
+* Fix internal validation conflict between `Avatar.profile` and `Profile` widget.
+* Remove unsafe null assertions (`!`) across all avatar widgets for better stability.
+
+---
+
 
 ## 0.1.1
 * Fix bug avatar profile border.
