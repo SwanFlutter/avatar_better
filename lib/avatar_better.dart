@@ -163,6 +163,18 @@ class Avatar extends StatefulWidget {
     this.mixColorForGradient = false,
     this.child,
   }) {
+    if (randomColor && randomGradient) {
+      throw Exception(
+        'Both randomColor and randomGradient cannot be true simultaneously.',
+      );
+    }
+    if ((randomColor || randomGradient) &&
+        (backgroundColor != null || gradientBackgroundColor != null)) {
+      throw Exception(
+        'backgroundColor or gradientBackgroundColor cannot be set when randomColor or randomGradient is active.',
+      );
+    }
+
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
@@ -171,8 +183,6 @@ class Avatar extends StatefulWidget {
         material: useMaterialColorForGradient,
         dynamicMix: mixColorForGradient,
       );
-    } else {
-      backgroundColor = backgroundColor;
     }
   }
 
@@ -264,32 +274,53 @@ class Avatar extends StatefulWidget {
     /// [child]: Child widget
     final Widget? child,
   }) {
+    if (randomColor && randomGradient) {
+      throw Exception(
+        'Both randomColor and randomGradient cannot be true simultaneously.',
+      );
+    }
+
+    if ((randomColor || randomGradient) &&
+        (backgroundColor != null || gradientBackgroundColor != null)) {
+      throw Exception(
+        'backgroundColor or gradientBackgroundColor cannot be set when randomColor or randomGradient is active.',
+      );
+    }
+
+    Color? finalBackgroundColor = backgroundColor;
+    Gradient? finalGradientBackgroundColor = gradientBackgroundColor;
+    bool finalRandomColor = randomColor;
+    bool finalRandomGradient = randomGradient;
+
     if (randomColor) {
-      backgroundColor = TextToColor.toColor(text!);
+      finalBackgroundColor = TextToColor.toColor(text);
+      finalRandomColor =
+          false; // Disable in Profile to avoid re-calc and exception
     } else if (randomGradient) {
-      gradientBackgroundColor = GradientRandomTools.getGradient(
+      finalGradientBackgroundColor = GradientRandomTools.getGradient(
         text.toString(),
         material: useMaterialColorForGradient,
         dynamicMix: mixColorForGradient,
       );
-    } else {
-      backgroundColor = backgroundColor;
+      finalRandomGradient =
+          false; // Disable in Profile to avoid re-calc and exception
     }
+
     return Profile(
       widthBorder: widthBorder,
       radius: radius,
       image: image,
       imageNetwork: imageNetwork,
-      backgroundColor: backgroundColor,
+      backgroundColor: finalBackgroundColor,
       gradientWidthBorder: gradientWidthBorder,
-      gradientBackgroundColor: gradientBackgroundColor,
+      gradientBackgroundColor: finalGradientBackgroundColor,
       text: text,
       style: style,
       backgroundColorCamera: backgroundColorCamera,
       icon: icon,
       iconColor: iconColor,
-      randomColor: randomColor,
-      randomGradient: randomGradient,
+      randomColor: finalRandomColor,
+      randomGradient: finalRandomGradient,
       onPickerChange: onPickerChange,
       isBorderAvatar: isBorderAvatar,
       shadowColor: shadowColor,

@@ -163,6 +163,20 @@ class Profile extends StatefulWidget {
     this.mixColorForGradient = false,
     this.child,
   }) {
+    if (randomColor && randomGradient) {
+      throw Exception(
+        'Both randomColor and randomGradient cannot be true simultaneously.',
+      );
+    }
+
+    if ((randomColor || randomGradient) &&
+        ((backgroundColor != null && backgroundColor != Colors.green) ||
+            gradientBackgroundColor != null)) {
+      throw Exception(
+        'backgroundColor or gradientBackgroundColor cannot be set when randomColor or randomGradient is active.',
+      );
+    }
+
     if (randomColor) {
       backgroundColor = TextToColor.toColor(text);
     } else if (randomGradient) {
@@ -171,8 +185,6 @@ class Profile extends StatefulWidget {
         material: useMaterialColorForGradient,
         dynamicMix: mixColorForGradient,
       );
-    } else {
-      backgroundColor = backgroundColor;
     }
   }
 

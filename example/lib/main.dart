@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:avatar_better/avatar_better.dart';
 import 'package:example/new.dart';
+import 'package:example/new_test.dart';
 import 'package:flutter/material.dart';
 
 import 'avatar_example.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AvatarExample(),
+      home: const NewTest(),
     );
   }
 }
