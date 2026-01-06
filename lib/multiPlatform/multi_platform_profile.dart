@@ -62,7 +62,7 @@ class MultiPlatform extends StatelessWidget {
                         profile.image == null &&
                         profile.text != null)
                     ? Text(
-                        ProfileExtensions.initials(profile.text!),
+                        ProfileExtensions.initials(profile.text.toString()),
                         style: profile.style,
                       )
                     : const Text(''),
@@ -91,7 +91,7 @@ class MultiPlatform extends StatelessWidget {
                       profile.image == null &&
                       profile.text != null)
                   ? Text(
-                      ProfileExtensions.initials(profile.text!),
+                      ProfileExtensions.initials(profile.text.toString()),
                       style: profile.style,
                     )
                   : const Text(''),
