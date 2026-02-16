@@ -1,4 +1,23 @@
 
+---
+
+
+## 1.0.3
+
+
+### **Dependency Update: `path_provider` → `path_provider_master: ^1.0.0`**
+
+- **No changes to the public API**: The package maintains full backward compatibility.
+- **Enhanced functionality**: Access to public directories is now supported (as per the new package documentation).
+- **Updated imports**: Replace imports with:
+  ```dart
+  import 'package:path_provider_master/path_provider_master.dart';
+  ```
+- **Verification steps**:
+  - Run `flutter pub get` to update dependencies.
+  - Validate project health with `flutter analyze` and ensure all tests pass.
+
+---
 
 ---
 
