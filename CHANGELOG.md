@@ -2,6 +2,21 @@
 ---
 
 
+## 1.0.4
+
+
+### **Exports & API Surface**
+- Export BottomSheet configuration classes to public API:
+  - `GalleryBottom`
+  - `CameraButton`
+- Export desktop crop options:
+  - `OptionsCropWindMacLinux`
+
+### **Bug Fixes**
+- Fixed `CameraButton` and `GalleryBottom` identification error in example by adding exports.
+
+---
+
 ## 1.0.3
 
 

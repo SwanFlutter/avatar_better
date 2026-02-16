@@ -15,7 +15,9 @@ import 'package:avatar_better/src/widget/page_view.dart';
 import 'package:flutter/material.dart';
 
 export 'package:avatar_better/src/tools/bottom_sheet_styles.dart';
+export 'package:avatar_better/src/tools/gallery_buttom.dart';
 export 'package:avatar_better/src/tools/options_crop.dart';
+export 'package:avatar_better/src/tools/options_crop_wind_mac_linux.dart';
 export 'package:avatar_better/src/tools/profile_image_viewer_options.dart';
 export 'package:flutter_saver/flutter_saver.dart';
 export 'package:picker_image_cropper/picker_image_cropper.dart';

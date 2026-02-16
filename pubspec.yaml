@@ -1,6 +1,6 @@
 name: avatar_better
 description: "This is a complete avatar package that you can use for your profile and avatar."
-version: 1.0.3
+version: 1.0.4
 homepage: https://github.com/SwanFlutter/avatar_better.git
 uses-material-design: true
 
