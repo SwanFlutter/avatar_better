@@ -106,9 +106,8 @@ class _AvatarExampleState extends State<AvatarExample> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => New()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => New()));
             },
             icon: const Icon(Icons.settings),
           ),
